@@ -1,0 +1,215 @@
+<div *ngIf="!isValid">
+  <div class="alert alert-info">
+    <strong>Información!</strong> {{ message }}.
+  </div>
+  <button
+    class="btn btn-success"
+    mat-button
+    (click)="terminar()"
+    cdkFocusInitial
+  >
+    Aceptar
+  </button>
+</div>
+
+<div *ngIf="isValid">
+  <div class="main-content">
+    <div class="container-fluid">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="alert alert-info" *ngIf="isSuccess">
+            <strong>Información!</strong> {{ message }}.
+          </div>
+
+          <!--div class="alert alert-info" *ngIf="isSuccess">
+                            <strong>Información!</strong> {{message}}.
+                        </!div-->
+
+          <!--p class="text-danger" *ngIf="showMessageError"> No existen Registros. </p-->
+
+          <mat-progress-bar
+            *ngIf="isLoading"
+            mode="indeterminate"
+          ></mat-progress-bar>
+          <div class="card card-plain">
+            <div class="card-header card-header-success">
+              <h4 class="card-title mt-0">Lista de Ficha Técnica</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="">
+                    <th>Nombre de Factor</th>
+                    <th>Categoria</th>
+                    <th>Factor</th>
+                    <th>Fecha de Registro</th>
+                    <th>Confimado</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of technicalSheetResult">
+                      <td>{{ item.factor }}</td>
+                      <td>{{ item.categoryName }}</td>
+                      <td>{{ item.presentFactor }}</td>
+                      <td>
+                        {{ item.registerDate | date: "dd-MM-yyyy h:mm:ss a" }}
+                      </td>
+                      <td>{{ item.confirmed }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-success" *ngIf="isSuccess">
+    <strong>Información!</strong> La siguiente Url es el ingreso a la atención
+    personalizada, favor haga click el la url cuando este finalize la revisión
+    de los sintomas y sea la hora de inicio de la sala.
+  </div>
+  <div class="alert alert-white" *ngIf="isSuccess">
+    <a
+      [href]="urlSala"
+      *ngIf="urlSala != ''"
+      style="color: blue; font-size: 18px;"
+      (click)="openWindow()"
+      target="popup"
+      >{{ urlSala }}</a
+    >
+  </div>
+  <div class="alert alert-success" *ngIf="isSuccess">
+    <strong
+      >Información! (PASO OPCIONAL): Si es necesario para el caso, asignar a un
+      doctor que ayude con el diagnostico, favor seleccione uno de la lista y
+      asignelo a su caso y enviele la URL de la sala.
+    </strong>
+  </div>
+  <div class="alert alert-danger" *ngIf="isValidDoctor === 2">
+    <strong>Información!</strong> {{ messageDoctor }}.
+  </div>
+  <div class="alert alert-info" *ngIf="isValidDoctor === 1">
+    <strong>Información!</strong> {{ messageDoctor }}.
+  </div>
+  <p *ngIf="doctors.length > 0">Doctores disponibles.</p>
+  <div class="row" *ngIf="doctors.length > 0">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-select
+          placeholder="Lista de Doctores"
+          [(ngModel)]="doctorId"
+          name="doctorId"
+          required
+        >
+          <mat-option *ngFor="let item of doctors" [value]="item.doctorId">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button class="btn btn-success" (click)="addingDoctor()">
+      Adicionar
+    </button>
+  </div>
+  <br />
+  <div class="alert alert-success" *ngIf="isSuccess">
+    <strong>
+      Ingrese el nombre del paciente que esta atendiendo y las observaciones del
+      caso.
+    </strong>
+  </div>
+
+  <div class="row">
+    <div mat-dialog-actions>
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            [placeholder]="'Nombre de paciente (' + nombreInterno.length + ')'"
+            [(ngModel)]="nombreInterno"
+            name="nombreInterno"
+          />
+        </mat-form-field>
+        <div
+          class="alert alert-danger"
+          *ngIf="nombreInternoRequired"
+          style="padding: 0;"
+        >
+          El campo Nombre de paciente es requerido
+        </div>
+        <div
+          class="alert alert-danger"
+          *ngIf="nombreInternoMax"
+          style="padding: 0;"
+        >
+          Max. 60 caracteres
+        </div>
+        <mat-form-field>
+          <textarea
+            matInput
+            [placeholder]="'Observaciones (' + observaciones.length + ')'"
+            [(ngModel)]="observaciones"
+            rows="8"
+          ></textarea>
+        </mat-form-field>
+        <div
+          class="alert alert-danger"
+          *ngIf="observacionRequired"
+          style="padding: 0;"
+        >
+          El campo Observaciones es requerido
+        </div>
+        <!--div
+          class="alert alert-danger"
+          *ngIf="observacionMax"
+          style="padding: 0;"
+        >
+          Max. 600 caracteres
+        </div-->
+
+        <mat-checkbox [(ngModel)]="envioBrigada">
+          <strong>
+            Si el caso amerita, ser notificado y enviado a una brigada de rescate, haga click
+ en el Check e ingrese la dirección lo más detallada posible <br>
+ con referencias explicitas del domicilio del paciente
+          </strong>
+        </mat-checkbox>
+
+        <mat-form-field *ngIf="envioBrigada">
+          <textarea
+            matInput
+            placeholder="Ingrese la dirección explicita del paciente"
+            [(ngModel)]="direccionPaciente"
+            rows="4"
+          ></textarea>
+        </mat-form-field>
+
+        <div
+          class="alert alert-danger"
+          *ngIf="direecionRequired"
+          style="padding: 0;"
+        >
+          El campo direccion del paciente es requerido
+        </div>
+      </div>
+
+      <button
+        class="btn btn-success"
+        mat-button
+        (click)="finalice(true)"
+        cdkFocusInitial
+      >
+        Atendido
+      </button>
+      <button
+        class="btn btn-warning"
+        mat-button
+        (click)="finalice(false)"
+        cdkFocusInitial
+      >
+        Inconcluso
+      </button>
+    </div>
+  </div>
+</div>

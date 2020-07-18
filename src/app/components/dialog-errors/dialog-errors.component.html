@@ -1,0 +1,14 @@
+<div class="card">
+    <div class="card-header card-header-danger">
+        <h4 class="card-title"><strong>Errores encontrados</strong></h4>
+    </div>
+    <div class="card-content">
+        <div style="max-height: 400px;overflow-y: scroll;">
+            <li *ngFor="let item of data">{{item}}</li>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-success" mat-button (click)="onNoClick()" cdkFocusInitial>Aceptar</button>
+    </div>
+</div>

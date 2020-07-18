@@ -1,0 +1,885 @@
+<fieldset [disabled]="isDisabled">
+    <mat-vertical-stepper labelPosition="bottom" #stepper>
+        <mat-step>
+            <ng-template matStepLabel>{{title1}}</ng-template>
+            <h2>{{title1}}</h2>
+            <mat-form-field>
+                <mat-label>Número de Historia Clínica</mat-label>
+                <input [(ngModel)]="formDto.numeroHistoria" name="numeroHistoria" matInput placeholder="Ingrese el número de Historia Clínica que Corresponde a esta persona y haga conocer este número para que el paciente acceda al cuestionario de seguimiento utilizando ese mismo numero"
+                    maxlength="25" required type="number">
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.nombre" name="nombre" matInput placeholder="Nombres" maxlength="40" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.apellidoPaterno" name="apellidoPaterno" matInput placeholder="Apellido Paterno" maxlength="30" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.apellidoMaterno" name="apeliidoMaterno" matInput placeholder="Apellido Materno" maxlength="30">
+            </mat-form-field>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Estado actual de Paciente</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.estadoActual" name="estadoActual" class="vertical-radio-group" aria-label="Estado actual de Paciente">
+                        <mat-radio-button *ngFor="let item of lista6" [value]="item" required>{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="formDto.estadoActual=='Otro'">
+                <!--<mat-label>Estado actual de Paciente (otro)</mat-label>-->
+                <input [(ngModel)]="formDto.estadoActualDescripcion" name="estadoActualDescripcion" matInput placeholder="Estado actual de Paciente (otro)" required>
+            </mat-form-field>
+            <div>
+                <button *ngIf="!isInternado()" mat-button class="btn btn-success" matStepperNext (click)="nextLastOne()">Siguiente</button>
+                <button *ngIf="isInternado()" mat-button class="btn btn-info" (click)="validateForm()">Cerrar Formulario</button>
+            </div>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title2}}</ng-template>
+            <h2>{{title2}}</h2>
+            <!--mat-form-field>
+                <input [(ngModel)]="formDto.medicoAsignado" name="medicoAsignado" matInput placeholder="Nombre del Medico que llena los datos" required>
+            </mat-form-field-->
+            <mat-form-field>
+                <!--<mat-label>Nro Matricula de Asegurado</mat-label> -->
+                <input [(ngModel)]="formDto.matricula" name="matricula" matInput placeholder="Nro Matricula de Asegurado" [disabled]="isLoading" maxlength="20" required>
+            </mat-form-field>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Tipo de Documento *</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.tipoDocumento" name="tipoDocumento" class="vertical-radio-group" aria-label="Tipo Documento" required>
+                        <mat-radio-button *ngFor="let item of listaDocumento" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.documento" name="documento" matInput placeholder="Documento" type="number" maxlength="15" required>
+            </mat-form-field>
+
+            <mat-list *ngIf="formDto.tipoDocumento=='CI'">
+                <mat-list-item>
+                    <mat-label>Extensión *</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.extension" name="extension" class="vertical-radio-group" aria-label="Extensión" required>
+                        <mat-radio-button *ngFor="let item of listaExtension" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Fecha nacimiento</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-form-field style="width: 60px;">
+                        <mat-label>Dia</mat-label>
+                        <mat-select [(ngModel)]="dayFechaNac" name="dayFechaNac" (ngModelChange)="calculateEdad($event)" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of days' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width: 60px;">
+                        <mat-label>Mes</mat-label>
+                        <mat-select [(ngModel)]="monthFechaNac" name="monthFechaNac" (ngModelChange)="calculateEdad($event)" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of months' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width: 80px;">
+                        <mat-label>Año</mat-label>
+                        <mat-select [(ngModel)]="yearFechaNac" name="yearFechaNac" (ngModelChange)="calculateEdad($event)" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of years' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <mat-form-field>
+                <input [(ngModel)]="formDto.edad" name="edad" matInput placeholder="Edad" type="number" required>
+            </mat-form-field>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Género *</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.genero" name="genero" class="vertical-radio-group" aria-label="Sexo" required>
+                        <mat-radio-button *ngFor="let item of listaGenero" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.empresaTrabaja" name="empresaTrabaja" matInput placeholder="En que Empresa Trabaja" type="text" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.direccion" name="direccion" matInput placeholder="Dirección" type="text" required>
+            </mat-form-field>
+
+            <div *ngIf="isVisibleMapa" class="map" #mapElement></div>
+
+            <mat-form-field>
+                <input [(ngModel)]="formDto.telefono" name="telefono" matInput placeholder="Número Telefónico" type="number" maxlength="8">
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.celular" name="celular" matInput placeholder="Número Celular" type="text" maxlength="8">
+            </mat-form-field>
+            <mat-form-field>
+                <!--<mat-label>Dirección de correo electrónico</mat-label>-->
+                <input [(ngModel)]="formDto.email" name="email" matInput placeholder="Dirección de correo electrónico" maxlength="40" minlength="5">
+            </mat-form-field>
+
+            <div>
+                <button mat-button class="btn btn-success" matStepperNext (click)="scrollInit()">Siguiente</button>
+            </div>
+        </mat-step>
+
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title3}}</ng-template>
+            <h2>{{title3}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Ocupación *</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group (change)="cleanOther('ocupacionDescripcion')" [(ngModel)]="formDto.ocupacion" name="ocupacion" class="vertical-radio-group" aria-label="Ocupación" required>
+                        <mat-radio-button *ngFor="let item of lista11" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="formDto.ocupacion=='Otro'">
+                <input [(ngModel)]="formDto.ocupacionDescripcion" name="formDto.ocupacionDescripcion" matInput placeholder="Ocupación (Otro)" type="text" required>
+            </mat-form-field>
+
+            <mat-list *ngIf="formDto.ocupacion==='Personal de Salud'">
+                <mat-list-item>
+                    <mat-label>¿Cual es su área laboral?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.areaLaboral" name="areaLaboral" class="vertical-radio-group" aria-label="¿Cual es su área laboral?" required>
+                        <mat-radio-button *ngFor="let item of lista14" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.areaLaboral==='Medicina'">
+                <mat-list-item>
+                    <mat-label>¿Cual es su labor de trabajo?</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista15; let i=index">
+                    <mat-checkbox [(ngModel)]="riesgoParaMedicosChecked[i]" [checked]="riesgoParaMedicosChecked[i]" [name]="'riesgoParaMedicos-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('riesgoParaMedicosChecked', 'lista15')">
+                <input [(ngModel)]="formDto.riesgoParaMedicosDescripcion" name="formDto.ocupacionDescripcion" matInput placeholder="Ocupación (Otro)" type="text">
+            </mat-form-field>
+
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title4}}</ng-template>
+            <h2>{{title4}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Fecha inicio de síntomas</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Dia</mat-label>
+                        <mat-select [(ngModel)]="dayFechaInicioSintomas" name="dayFechaInicioSintomas" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of days' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Mes</mat-label>
+                        <mat-select [(ngModel)]="monthFechaInicioSintomas" name="monthFechaInicioSintomas" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of months' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:80px">
+                        <mat-label>Año</mat-label>
+                        <mat-select [(ngModel)]="yearFechaInicioSintomas" name="yearFechaInicioSintomas" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of years' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Fecha toma muestra</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Dia</mat-label>
+                        <mat-select [(ngModel)]="dayFechaTomaMuestra" name="dayFechaTomaMuestra" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of days' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Mes</mat-label>
+                        <mat-select [(ngModel)]="monthFechaTomaMuestra" name="monthFechaTomaMuestra" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of months' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:80px">
+                        <mat-label>Año</mat-label>
+                        <mat-select [(ngModel)]="yearFechaTomaMuestra" name="yearFechaTomaMuestra" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of years' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <!--mat-list>
+                <mat-list-item>
+                    <mat-label>¿Se encuentra actualmente Internado?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.estaInternado" name="estaInternado" class="vertical-radio-group" aria-label="¿Se encuentra actualmente Internado?" required>
+                        <mat-radio-button *ngFor="let item of lista17" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list-->
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Que enfermedades padece?</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista18; let i=index">
+                    <mat-checkbox [(ngModel)]="enfermedadesPadeceChecked[i]" [checked]="enfermedadesPadeceChecked[i]" [name]=" 'enfermedadesPadece-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('enfermedadesPadeceChecked', 'lista18')">
+                <input [(ngModel)]="formDto.enfermedadesPadeceDescripcion" name="enfermedadesPadeceDescripcion" matInput placeholder="¿Que enfermedades padece? (Otro)" required>
+            </mat-form-field>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Si respondió afirmativamente - ¿Toma usted alguno de los siguientes medicamentos para su enfermedad ?</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista20; let i=index">
+                    <mat-checkbox [(ngModel)]="medicamentosPorEnfermedadChecked[i]" [checked]="medicamentosPorEnfermedadChecked[i]" [name]=" 'medicamentosPorEnfermedad-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('medicamentosPorEnfermedadChecked', 'lista20')">
+                <input [(ngModel)]="formDto.medicamentosPorEnfermedadDescripcion" name="medicamentosPorEnfermedadDescripcion" matInput placeholder="Otros Medicamentos">
+            </mat-form-field>
+            <mat-list *ngIf="formDto.genero=='F'">
+                <mat-list-item>
+                    <mat-label>¿Esta usted Embarazada?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.estaEmbarazada" name="estaEmbarazada" class="vertical-radio-group" aria-label="¿Esta usted Embarazada?">
+                        <mat-radio-button *ngFor="let item of lista21" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.genero=='F'">
+                <mat-list-item>
+                    <mat-label>Fecha ultima mestruacion</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Dia</mat-label>
+                        <mat-select [(ngModel)]="dayFechaUltimaMestruacion" name="dayFechaUltimaMestruacion" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of days' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:60px">
+                        <mat-label>Mes</mat-label>
+                        <mat-select [(ngModel)]="monthFechaUltimaMestruacion" name="monthFechaUltimaMestruacion" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of months' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width:80px">
+                        <mat-label>Año</mat-label>
+                        <mat-select [(ngModel)]="yearFechaUltimaMestruacion" name="yearFechaUltimaMestruacion" [disabled]="isDisabled">
+                            <mat-option *ngFor='let key of years' [value]="key">
+                                {{ key }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <!--<mat-list>
+            <mat-list-item>
+                <mat-label>¿Ha perdido Peso de manera no intencional?</mat-label>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <mat-radio-group [(ngModel)]="formDto.perdioPeso" name="perdioPeso" class="vertical-radio-group" aria-label="¿Ha perdido Peso de manera no intencional?" required>
+                    <mat-radio-button *ngFor="let item of listaSiNo" [value]="item.value">{{item.text}}</mat-radio-button>
+                </mat-radio-group>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>-->
+            <mat-label>
+                <h5>Peso corporal(IMC = peso [kg]/ estatura [m2])</h5>
+            </mat-label>
+            <mat-form-field>
+                <!--<mat-label>Peso aproximado en Kilogramos</mat-label>-->
+                <input (change)="calculateMasaCorporal()" [(ngModel)]="formDto.peso" name="peso" matInput placeholder="Peso aproximado en Kilogramos" type="number" required>
+            </mat-form-field>
+            <mat-form-field>
+                <!--<mat-label>Talla aproximada en Centimetros</mat-label>-->
+                <input (change)="calculateMasaCorporal()" [(ngModel)]="formDto.talla" name="talla" matInput placeholder="Talla aproximada en Centimetros" type="number" required>
+            </mat-form-field>
+            <mat-form-field>
+                <!--<mat-label>Índice de Masa Corporal</mat-label>-->
+                <input [(ngModel)]="formDto.indiceMasaCorporal" name="indiceMasaCorporal" matInput placeholder="Índice de Masa Corporal" type="number" required>
+            </mat-form-field>
+
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <form>
+                <ng-template matStepLabel>{{title5}}</ng-template>
+                <h2>{{title5}}</h2>
+                <mat-list>
+                    <mat-list-item>
+                        <mat-label>¿Tiene en su domicilio una habitación independiente con baño para que ud. pueda permanecer en aislamiento domiciliario? *</mat-label>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <mat-radio-group [(ngModel)]="formDto.disponeDomicilio" name="disponeDomicilio" class="vertical-radio-group" aria-label="¿Tiene en su domicilio una habitación independiente con baño para que ud. pueda
+            permanecer en aislamiento domiciliario?" required>
+                            <mat-radio-button *ngFor="let item of lista26" [value]="item.value">{{item.text}}</mat-radio-button>
+                        </mat-radio-group>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item>
+                        <mat-label>¿Dispone de alguien que lo ayude cuando tenga que estar en cama?</mat-label>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <mat-radio-group [(ngModel)]="formDto.disponePersonaAyudaCama" name="disponePersonaAyudaCama" class="vertical-radio-group" aria-label="¿Dispone de alguien que lo ayude cuando tenga que estar en cama?" required>
+                            <mat-radio-button *ngFor="let item of lista27" [value]="item.value">{{item.text}}</mat-radio-button>
+                        </mat-radio-group>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item>
+                        <mat-label>¿Dispone de alguien con quien pueda contar cuando necesite hablar (pedir ayuda)?</mat-label>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <mat-radio-group [(ngModel)]="formDto.disponePersonaAyudaHablar" name="disponePersonaAyudaHablar" class="vertical-radio-group" aria-label="¿Dispone de alguien con quien pueda contar cuando necesite hablar (pedir ayuda)?" required>
+                            <mat-radio-button *ngFor="let item of lista28" [value]="item.value">{{item.text}}</mat-radio-button>
+                        </mat-radio-group>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item>
+                        <mat-label>¿Dispone de alguien que le prepare la comida?</mat-label>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <mat-radio-group [(ngModel)]="formDto.disponeAyudaComida" name="disponeAyudaComida" class="vertical-radio-group" aria-label="¿Dispone de alguien que le prepare la comida?" required>
+                            <mat-radio-button *ngFor="let item of lista29" [value]="item.value">{{item.text}}</mat-radio-button>
+                        </mat-radio-group>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item>
+                        <mat-label>¿Dispone de alguien que le ayude en sus tareas de casa (limpieza, medicamentos, ropa)? </mat-label>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <mat-radio-group [(ngModel)]="formDto.disponeAyudaLimpieza" name="disponeAyudaLimpieza" class="vertical-radio-group" aria-label="¿Dispone de alguien que le ayude en sus tareas de casa (limpieza, medicamentos, ropa)?" required>
+                            <mat-radio-button *ngFor="let item of lista30" [value]="item.value">{{item.text}}</mat-radio-button>
+                        </mat-radio-group>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+
+                <div>
+                    <button mat-button matStepperPrevious>Atras</button>
+                    <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title6}}</ng-template>
+            <h2>{{title6}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Fuma o ha fumado en los ultimos 3 meses? (cigarro, pipa, vaping)</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.fuma" name="fuma" class="vertical-radio-group" aria-label="¿Fuma o ha fumado en los ultimos 3 meses? (cigarro, pipa, vaping)" required>
+                        <mat-radio-button *ngFor="let item of lista31" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.fuma=='Si'">
+                <mat-list-item>
+                    <mat-label>¿Cuantos cigarrilos al día?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.cigarrillosAlDia" name="cigarrillosAlDia" class="vertical-radio-group" aria-label="¿Cuantos cigarrilos al día?">
+                        <mat-radio-button *ngFor="let item of lista32" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.fuma=='No'">
+                <mat-list-item>
+                    <mat-label>Si ya no Fuma ¿Hace cuanto?
+                    </mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.haceCuantoNoFuma" name="haceCuantoNoFuma" class="vertical-radio-group" aria-label="Si ya no Fuma ¿Hace cuanto?" required>
+                        <mat-radio-button *ngFor="let item of lista33" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <!--<mat-list>
+                <mat-list-item>
+                    <mat-label>Consume o ha consumido bebidas alcohólicas </mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.bebidasAlcoholicas" name="bebidasAlcoholicas" class="vertical-radio-group" aria-label="Consume o ha consumido bebidas alcohólicas" required>
+                        <mat-radio-button *ngFor="let item of lista34" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.bebidasAlcoholicas=='Si'">
+                <mat-list-item>
+                    <mat-label>Si consume bebidas alcohólicas (1 medida equivale a [Cerveza 350 ml] [Vino 140 ml] [Whisky u otro licor destilado 44 ml])</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.cantidadConsumoBebidas" name="cantidadConsumoBebidas" class="vertical-radio-group" aria-label="Si consume bebidas alcohólicas">
+                        <mat-radio-button *ngFor="let item of lista35" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Ha consumido marihuana, cocaína, Molly/Extasis, crack, cristal meth u otro estupefaciente en los últimos 3 meses?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.estupefacientes" name="estupefacientes" class="vertical-radio-group" aria-label="¿Ha consumido marihuana, cocaína, Molly/Extasis, crack, cristal meth u otro estupefaciente en los últimos 3 meses?" required>
+                        <mat-radio-button *ngFor="let item of lista36" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Realiza actividades Físicas?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.sedentarismo" name="sedentarismo" class="vertical-radio-group" aria-label="¿Realiza actividades Físicas?" required>
+                        <mat-radio-button *ngFor="let item of lista37" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>-->
+            <!--<mat-list>
+                <mat-list-item>
+                    <mat-label>¿Ha tenido alguna carencia económica para obtener alimentos desde el inicio de la cuarentena hasta hoy?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.carenciaEconomica" name="carenciaEconomica" class="vertical-radio-group" aria-label="¿Ha tenido alguna carencia económica para obtener alimentos desde el inicio de
+                la cuarentena hasta hoy?" required>
+                        <mat-radio-button *ngFor="let item of lista38" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>-->
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title7}}</ng-template>
+            <h2>{{title7}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Ha existido algún tipo de tensión familiar entre los miembros desde que inicio la cuarentena?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.tensionFamiliar" name="tensionFamiliar" class="vertical-radio-group" aria-label="¿Ha existido algún tipo de tensión familiar entre los miembros desde que inicio la
+            cuarentena?" required>
+                        <mat-radio-button *ngFor="let item of lista39" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.tensionFamiliar=='Si' || formDto.tensionFamiliar=='TV'">
+                <mat-list-item>
+                    <mat-label> La tensión ha escalado a:</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista40; let i=index">
+                    <mat-checkbox [(ngModel)]="escalaTensionFamiliarChecked[i]" [checked]="escalaTensionFamiliarChecked[i]" [name]=" 'escalaTensionFamiliar-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="formDto.tensionFamiliar=='Si' || formDto.tensionFamiliar=='TV'">
+                <!--<mat-label>¿Hay algo que desee comentarnos?</mat-label>-->
+                <input [(ngModel)]="formDto.comentariosTensionFamiliar" name="comentariosTensionFamiliar" matInput placeholder="¿Hay algo que desee comentarnos?" maxlength="100">
+            </mat-form-field>
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title8}}</ng-template>
+            <h2>{{title8}}</h2>
+            <!--<mat-list>
+            <mat-list-item>
+                <mat-label>¿Como describe su salud en general?</mat-label>
+            </mat-list-item>
+            <mat-list-item *ngFor="let item of lista42; let i=index">
+                <mat-checkbox [(ngModel)]="estadoSaludActualChecked[i]" [checked]="estadoSaludActualChecked[i]" [name]=" 'estadoSaludActual-'+i" [value]="item">{{item}}</mat-checkbox>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>-->
+            <!--<mat-form-field>
+            <input matInput placeholder="¿Como describe su salud en general? (Otro)">
+        </mat-form-field>-->
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Como describe su estado de salud el día de hoy? (1 Muy enfermo y 5 Muy Bien)</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.rangoEstadoSalud" name="rangoEstadoSalud" class="vertical-radio-group" aria-label="¿Como describe su estado de salud el día de hoy? (de menor a mayor)" required>
+                        <mat-radio-button *ngFor="let item of lista45" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Dolor de Garganta?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.dolorGarganta" name="dolorGarganta" class="vertical-radio-group" aria-label="¿Dolor de Garganta?" required>
+                        <mat-radio-button *ngFor="let item of lista47" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Dolor de Cabeza?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.dolorCabeza" name="dolorCabeza" class="vertical-radio-group" aria-label="¿Dolor de Cabeza?" required>
+                        <mat-radio-button *ngFor="let item of lista48" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title9}}</ng-template>
+            <h2>{{title9}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Tiene tos?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.tos" name="tos" class="vertical-radio-group" aria-label="¿Tiene tos?" required>
+                        <mat-radio-button *ngFor="let item of lista46" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Tienes fiebre?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.fiebre" name="fiebre" class="vertical-radio-group" aria-label="¿Tienes fiebre?" required>
+                        <mat-radio-button *ngFor="let item of lista49" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Cual es tu tempertura?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.temperatura" name="temperatura" class="vertical-radio-group" aria-label="¿Cual es tu tempertura?" required>
+                        <mat-radio-button *ngFor="let item of lista50" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <!--mat-list>
+                <mat-list-item>
+                    <mat-label>¿Cuanto es su pulso?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.pulso" name="pulso" class="vertical-radio-group" aria-label="¿Cuanto es su pulso?" required>
+                        <mat-radio-button *ngFor="let item of lista51" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list-->
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Tiene dificultad para respirar?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.dificultadRespirar" name="dificultadRespirar" class="vertical-radio-group" aria-label="¿Tiene dificultad para respirar?" required>
+                        <mat-radio-button *ngFor="let item of lista52" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <!--mat-list>
+                <mat-list-item>
+                    <mat-label>¿Cuanto es su frecuencia respiratoria?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.frecuenciaRespiratoria" name="frecuenciaRespiratoria" class="vertical-radio-group" aria-label="¿Cuanto es su frecuencia respiratoria?" required>
+                        <mat-radio-button *ngFor="let item of lista53" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list-->
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Tiene dificultad para terminar las frases u oraciones cuando habla debido al cansancio?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.dificultadTerminarFrases" name="dificultadTerminarFrases" class="vertical-radio-group" aria-label="¿Tiene dificultad para terminar las frases u oraciones cuando habla
+            debido al cansancio?" required>
+                        <mat-radio-button *ngFor="let item of lista54" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Cansancion en reposo?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.cansancioReposo" name="cansancioReposo" class="vertical-radio-group" aria-label="¿Cansancion en reposo?" required>
+                        <mat-radio-button *ngFor="let item of lista54" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title10}}</ng-template>
+            <h2>{{title10}}</h2>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Ha tomado uno o mas de los siguientes medicamentos con el objetivo de combatir el COVID 19?</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista55; let i=index">
+                    <mat-checkbox [(ngModel)]="medicamentosConsumidosChecked[i]" [checked]="medicamentosConsumidosChecked[i]" [name]=" 'medicamentosConsumidos-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('medicamentosConsumidosChecked', 'lista55')">
+                <input [(ngModel)]="formDto.medicamentosConsumidosDescripcion" name="medicamentosConsumidosDescripcion" matInput placeholder="¿Ha tomado uno o mas de los siguientes medicamentos con el objetivo de combatir el COVID 19? (Otro)" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.metodoTratamientoUtilizado" name="metodoTratamientoUtilizado" matInput placeholder="Metodo de tramamiento utilizado">
+            </mat-form-field>
+
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Ha usado alguna de las siguientes vitaminas o complementos alimentarios para combatir el virus de Covid-19?</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista57; let i=index">
+                    <mat-checkbox [(ngModel)]="vitaminasConsumidasChecked[i]" [checked]="vitaminasConsumidasChecked[i]" [name]=" 'vitaminasConsumidas-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('vitaminasConsumidasChecked', 'lista57')">
+                <input [(ngModel)]="formDto.vitaminasConsumidasDescripcion" name="vitaminasConsumidasDescripcion" matInput placeholder="¿Ha usado alguna de las siguientes vitaminas o complementos alimentarios para combatir el virus de Covid-19? (Otro)" required>
+            </mat-form-field>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>Ha recurrido a la medicina naturista para hacer frente al virus o evitar el contagio por Covid-19?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.usoMedicinaNaturista" name="usoMedicinaNaturista" class="vertical-radio-group" aria-label="Ha recurrido a la medicina naturista para hacer frente al virus o evitar
+            el contagio por Covid-19?" required>
+                        <mat-radio-button *ngFor="let item of lista59" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list *ngIf="formDto.usoMedicinaNaturista=='Si'">
+                <mat-list-item>
+                    <mat-label>Mencione cual de las siguientes ha utilizado</mat-label>
+                </mat-list-item>
+                <mat-list-item *ngFor="let item of lista60; let i=index">
+                    <mat-checkbox [(ngModel)]="medicinaNaturistaConsumidaChecked[i]" [checked]="medicinaNaturistaConsumidaChecked[i]" [name]=" 'medicinaNaturistaConsumida-'+i" [value]="item">{{item}}</mat-checkbox>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-form-field *ngIf="isOtherCheked('medicinaNaturistaConsumidaChecked', 'lista60')">
+                <input [(ngModel)]="formDto.medicinaNaturistaConsumidaDescripcion" name="medicinaNaturistaConsumidaDescripcion" matInput placeholder="Menciones cual de las siguientes ha utilizado (Otro)">
+            </mat-form-field>
+            <!--<mat-form-field>
+            <input matInput placeholder="">
+        </mat-form-field>-->
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿En caso de emergencia, le gustaría recibir suero hiperinmune de pacientes Infectados por Covid-19 que han superado la enfermedad y ahora son NEGATIVOS ?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.deseaRecibirSuero" name="deseaRecibirSuero" class="vertical-radio-group" aria-label="¿En caso de emergencia, le gustaría recibir suero hiperinmune de pacientes Infectados
+            por Covid-19 que han superado la enfermedad y ahora son NEGATIVOS ?" required>
+                        <mat-radio-button *ngFor="let item of lista62" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list>
+                <mat-list-item>
+                    <mat-label>¿Le gustaria voluntariamente donar su sangre una vez haya superado la enfermedad, para que lo utilizen otros pacientes en caso de emergencia?</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.deseaDonarSangre" (change)="changeDonate()" name="deseaDonarSangre" class="vertical-radio-group" aria-label="¿Le gustaria voluntariamente donar su sangre una vez haya
+            superado la enfermedad, para que lo utilizen otros pacientes en caso de emergencia?" required>
+                        <mat-radio-button *ngFor="let item of lista63" [value]="item.value">{{item.text}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <mat-list *ngIf="isDonate">
+                <mat-list-item>
+                    <mat-label>Tipo de sangre</mat-label>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                    <mat-radio-group [(ngModel)]="formDto.tipoSangre" name="tipoSangre" class="vertical-radio-group" aria-label="Tipo de sangre">
+                        <mat-radio-button *ngFor="let item of listTypeBlood" [value]="item">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+            </div>
+        </mat-step>
+        <mat-step *ngIf="!isInternado()">
+            <ng-template matStepLabel>{{title11}}</ng-template>
+            <h2>{{title11}}</h2>
+            <mat-form-field>
+                <input [(ngModel)]="formDto.apoyoEmocional" name="apoyoEmocional" matInput placeholder="Apoyo emocional de un especialista" required>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button class="btn btn-success" (click)="validateForm()" [disabled]="isLoading">Guardar</button>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+</fieldset>

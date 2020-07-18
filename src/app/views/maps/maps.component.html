@@ -1,0 +1,92 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="card card-plain">
+      <div class="card-header card-header-success">
+        <h4 class="card-title">Mapa en vivo</h4>
+        <!--ul>
+                    <li>{{options.zoom}}</li>
+                    <li>{{timestamp}}</li>
+                </ul-->
+      </div>
+      <div class="row">
+        <div class="col-md-9">
+          <div class="card-body">
+            <button (click)="loadMapProperties()" class="btn btn-success">
+              Actualizar
+            </button>
+            <mat-progress-bar
+              *ngIf="isLoading"
+              mode="indeterminate"
+            ></mat-progress-bar>
+            <!--<button (click)="addNotificationExiste()">addNotificationExiste</button>-->
+            <!--<button (click)="addNotificationNoExiste()">addNotificationNoExiste</button>-->
+            <!--div class="map" leaflet [leafletOptions]="options">
+                        </div-->
+            <div class="map" #mapElement></div>
+            <!--<iframe class="map" src="/assets/MapaVivo/CovidMapa.html" frameborder="0"></iframe>-->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h4 class="card-title"><strong>Notificaciones en Vivo</strong></h4>
+          <div style="width: 250px; height: 580px; overflow-y: scroll;">
+            <div
+              class="alert"
+              [style]="
+                'color:#FFFFFF;background-color: ' +
+                alertNotification[item.nivel - 1]
+              "
+              *ngFor="let item of notificationsResult; let i = index"
+            >
+              <button
+                mat-button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <i class="material-icons">close</i>
+              </button>
+              <span
+                ><b style="font-size: 9px;"> Nivel: {{ item.nivel }}</b></span
+              >
+              <span
+                ><b style="font-size: 9px;">
+                  Número Contacto: {{ item.numeroContacto }}</b
+                ></span
+              >
+              <span
+                ><b style="font-size: 9px;"> CI.: {{ item.ci }}</b></span
+              >
+              <span
+                ><b style="font-size: 9px;">
+                  Fecha: {{ item.fechaHoraRegistro | date: "dd-MM-yyyy" }}</b
+                ></span
+              >
+              <span
+                ><b style="font-size: 9px;">
+                  Hora: {{ item.fechaHoraRegistro | date: "h:mm:ss a" }}</b
+                ></span
+              >
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="setFichaTecnica(item)"
+                style="font-size: 9px;"
+              >
+                Ficha Técnica
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="goPointOfMap(item.latitud, item.longitud, 16)"
+                style="font-size: 9px;"
+              >
+                Ir al punto
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

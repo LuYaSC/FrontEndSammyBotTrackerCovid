@@ -1,0 +1,450 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Formulario de Evolución</h4>
+                    </div>
+                    <div class="card-body">
+                        <!--<mat-label>Buscar por:</mat-label><br>
+                        <mat-radio-group [(ngModel)]="searchBy" name="searchBy" class="" aria-label="searchBy" (change)="cleanSearch()">
+                            <mat-radio-button style="margin-right: 20px;" value="Matricula">Matricula</mat-radio-button>
+                            <mat-radio-button style="margin-right: 20px;" value="Historia Clinica">Historia Clinica</mat-radio-button>
+                        </mat-radio-group>
+
+                        <mat-form-field appearance="fill" *ngIf="searchBy=='Historia Clinica'">
+                            <mat-label>Historia Clinica</mat-label>
+                            <input [(ngModel)]="historia" matInput>
+                            <button class="btn btn-success" matSuffix style="display: inline;" (click)="cleanSearch()">
+                                <mat-icon  style="display: inline;">backspace</mat-icon>
+                            </button>
+                            <button class="btn btn-success" matSuffix style="display: inline;" (click)="getFormPrevious()">
+                                <mat-icon  style="display: inline;">search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" *ngIf="searchBy=='Matricula'">
+                            <mat-label>Matricula</mat-label>
+                            <input [(ngModel)]="matricula" matInput>
+
+                            <button class="btn btn-success" matSuffix style="display: inline;" (click)="cleanSearch()">
+                                <mat-icon  style="display: inline;">backspace</mat-icon>
+                            </button>
+                            <button class="btn btn-success" matSuffix style="display: inline;" (click)="getFormPrevious()">
+                                <mat-icon  style="display: inline;">search</mat-icon>
+                            </button>
+                        </mat-form-field>-->
+
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Historias clinicas</mat-label>
+                                    <mat-select [(ngModel)]="idForm" name="idForm" (ngModelChange)="findHistoryClinics()">
+                                        <mat-option>Opciones</mat-option>
+                                        <mat-option *ngFor="let item of historyClinics" [value]="item.id">{{item.numeroHistoria}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <button class="btn btn-success" (click)="getFormTrakingById()">Ver Diagnostico Inicial</button>
+                                <button class="btn btn-success" (click)="newForm()">Nuevo Formulario</button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header card-header-success">
+                                        <h4 class="card-title">Descripción Historia clinica</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5><span style="color:#ff4400">Nro Historia:</span> {{historyClinic.numeroHistoria}}</h5>
+                                        <h5><span style="color:#ff4400">Paciente:</span> {{historyClinic.paciente}}</h5>
+                                        <h5><span style="color:#ff4400">Inicio:</span> {{historyClinic.tieneDiagInicial}}</h5>
+                                        <h5><span style="color:#ff4400">Evolución:</span> {{historyClinic.tieneDiagEvolucion}}</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+                            <div class="alert alert-info" *ngIf="isSuccess">
+                                <strong>Información!</strong> {{message}}.
+                            </div>
+                            <div class="col-md-12" *ngIf="showFormTrakin===true">
+                                <app-traking-form-disabled [data-formulario]="formTrakingDto"></app-traking-form-disabled>
+                            </div>
+
+                            <mat-vertical-stepper labelPosition="bottom" #stepper [style]="showForm===true?'display:block':'display:none'">
+                                <mat-step>
+                                    <ng-template matStepLabel>{{title1}}</ng-template>
+                                    <h2>{{title1}}</h2>
+                                    <mat-form-field>
+                                        <!--<mat-label>Nombre del Médico de Seguimiento</mat-label>-->
+                                        <input [(ngModel)]="nombreMedico" name="nombreMedico" matInput placeholder="Nombre del Médico de Seguimiento" required>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <!--<mat-label>Día de seguimiento</mat-label>-->
+                                        <input [(ngModel)]="formDto.dia" name="dia" matInput placeholder="Día de seguimiento" type="number" required>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <!--<mat-label>Coloque el número de Historia Clínica que Corresponde a esta persona y haga conocer este número para que el paciente acceda al cuestionario de seguimiento utilizando ese mismo número</mat-label>-->
+                                        <input [(ngModel)]="basicData.numeroHistoria" name="numeroHistoria" matInput placeholder="Coloque el número de Historia Clínica que Corresponde a esta persona y haga conocer este número para que el paciente acceda al cuestionario de seguimiento utilizando ese mismo número"
+                                            required>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <!--<mat-label>Nombres del Paciente</mat-label>-->
+                                        <input [(ngModel)]="basicData.paciente" name="paciente" matInput placeholder="Nombres del Paciente" required>
+                                    </mat-form-field>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>Estado actual de Paciente</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.estadoActual" name="estadoActual" class="vertical-radio-group" aria-label="Estado actual de Paciente">
+                                                <mat-radio-button *ngFor="let item of lista6" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-form-field *ngIf="formDto.estadoActual=='Otro'">
+                                        <!--<mat-label>Estado actual de Paciente (otro)</mat-label>-->
+                                        <input [(ngModel)]="formDto.estadoActualDescripcion" name="estadoActualDescripcion" matInput placeholder="Estado actual de Paciente (otro)" required>
+                                    </mat-form-field>
+
+                                    <div>
+                                        <button *ngIf="!isInternado()" mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                        <button *ngIf="isInternado()" mat-button class="btn btn-info" (click)="validateForm()">Cerrar Seguimiento</button>
+                                    </div>
+                                </mat-step>
+
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title2}}</ng-template>
+                                    <h2>{{title2}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>Aún cuenta con alguien</mat-label>
+                                        </mat-list-item>
+                                        <mat-list-item *ngFor="let item of lista8; let i=index">
+                                            <mat-checkbox [(ngModel)]="ayudaExternaChecked[i]" [checked]="ayudaExternaChecked[i]" [name]="'ayudaExterna-'+i" [value]="item">{{item}}</mat-checkbox>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-form-field *ngIf="isOtherCheked('ayudaExternaChecked', 'lista8')">
+                                        <!--<mat-label>Aún cuenta con alguien (Otro)</mat-label>-->
+                                        <input [(ngModel)]="formDto.ayudaExternaDescripcion" name="ayudaExternaDescripcion" matInput placeholder="Aún cuenta con alguien (Otro)">
+                                    </mat-form-field>
+                                    <mat-form-field *ngIf="isOtherChekedV2('ayudaExternaChecked', 'lista8', 'Ninguna de las anteriores')">
+                                        <!--<mat-label>Aún cuenta con alguien (Otro)</mat-label>-->
+                                        <input [(ngModel)]="formDto.ayudaExternaComentarios" name="ayudaExternaDescripcion" matInput placeholder="Aún cuenta con alguien (Ninguna de las anteriores)">
+                                    </mat-form-field>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title3}}</ng-template>
+                                    <h2>{{title3}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Como describe su estado de salud el día de hoy con relacion al dia de ayer? (de menor a mayor)</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antEstadoSalud}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.descripcionSalud" name="descripcionSalud" class="vertical-radio-group" aria-label="¿Como describe su estado de salud el día de hoy con relacion al dia de ayer? (de menor a mayor)">
+                                                <mat-radio-button *ngFor="let item of lista10" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene Dolor en la garganta?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antDolorGarganta}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.dolorGarganta" name="dolorGarganta" class="vertical-radio-group" aria-label="¿Tiene Dolor en la garganta?">
+                                                <mat-radio-button *ngFor="let item of lista11" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list *ngIf="formDto.dolorGarganta=='Si'">
+                                        <mat-list-item>
+                                            <mat-label>¿Cuanto es su dolor de garganta?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antCuantoDolorGarganta}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.cuantoDolorGarganta" name="cuantoDolorGarganta" class="vertical-radio-group" aria-label="¿Cuanto es su dolor de garganta?">
+                                                <mat-radio-button *ngFor="let item of lista12" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene dolor de cabeza?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antDolorCabeza}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.dolorCabeza" name="dolorCabeza" class="vertical-radio-group" aria-label="¿Tiene dolor de cabeza?">
+                                                <mat-radio-button *ngFor="let item of lista13" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list *ngIf="formDto.dolorCabeza=='Si'">
+                                        <mat-list-item>
+                                            <mat-label>¿Cuanto dolor de Cabeza?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antCuantoDolorCabeza}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.cuantoDolorCabeza" name="cuantoDolorCabeza" class="vertical-radio-group" aria-label="¿Cuanto dolor de Cabeza?">
+                                                <mat-radio-button *ngFor="let item of lista14" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title4}}</ng-template>
+                                    <h2>{{title4}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene tos?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antTos}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.tos" name="tos" class="vertical-radio-group" aria-label="¿Tiene tos?">
+                                                <mat-radio-button *ngFor="let item of lista15" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene fiebre?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antFiebre}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.fiebre" name="fiebre" class="vertical-radio-group" aria-label="¿Tiene fiebre?">
+                                                <mat-radio-button *ngFor="let item of lista16" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Cuánto es su tempertura hoy?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antTemperatura}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.cuantaTemperatura" name="cuantaTemperatura" class="vertical-radio-group" aria-label="¿Cuánto es su tempertura hoy?">
+                                                <mat-radio-button *ngFor="let item of lista17" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene dificultad para respirar?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antDificultadRespirar}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.dificultadRespirar" name="dificultadRespirar" class="vertical-radio-group" aria-label="¿Tiene dificultad para respirar?">
+                                                <mat-radio-button *ngFor="let item of lista18" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Tiene dificultad para terminar las frases u oraciones cuando habla debido al cansancio?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antDificultadTerminarOraciones}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.dificultadTerminarOraciones" name="dificultadTerminarOraciones" class="vertical-radio-group" aria-label="¿Tiene dificultad para terminar las frases u oraciones cuando habla debido al cansancio?">
+                                                <mat-radio-button *ngFor="let item of lista19" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Siente cansancio estando en reposo?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <div class="alert" style="padding: 5px 10px;background-color:darkgreen;color:#FFFFFF">
+                                            La respuesta anterior fue: {{basicData.antCansancio}}
+                                        </div>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.sienteCansancio" name="sienteCansancio" class="vertical-radio-group" aria-label="¿Siente cansancio estando en reposo?">
+                                                <mat-radio-button *ngFor="let item of lista20" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title5}}</ng-template>
+                                    <h2>{{title5}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Mando a alguna persona a que recoja su tratamiento?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.recojoMedicamentos" name="recojoMedicamentos" class="vertical-radio-group" aria-label="¿Mando a alguna persona a que recoja su tratamiento?">
+                                                <mat-radio-button *ngFor="let item of lista21" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-form-field *ngIf="formDto.recojoMedicamentos=='No'||formDto.recojoMedicamentos=='Todavia'">
+                                        <!--<mat-label>Comentarios</mat-label>-->
+                                        <input [(ngModel)]="formDto.recojoMedicamentosDescripcion" name="recojoMedicamentosDescripcion" matInput placeholder="Debe recoger su medicacion cuanto antes y debe mandar a un familiar sano con sus documentos a que los recoja del Paise Irala" required>
+                                    </mat-form-field>
+                                    <mat-list *ngIf="formDto.recojoMedicamentos=='Si'">
+                                        <mat-list-item>
+                                            <mat-label>¿Está tomando su medicación como se le indico?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.tomaMedicamentos" name="tomaMedicamentos" class="vertical-radio-group" aria-label="¿Está tomando su medicación como se le indico?">
+                                                <mat-radio-button *ngFor="let item of lista23" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-form-field *ngIf="formDto.tomaMedicamentos=='No'">
+                                        <!--<mat-label>¿Por qué no ha tomado su medicación?</mat-label>-->
+                                        <input [(ngModel)]="formDto.tomaMedicamentosDescripcion" name="tomaMedicamentosDescripcion" matInput placeholder="¿Por qué no ha tomado su medicación?" required>
+                                    </mat-form-field>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step *ngIf="!isInternado()&&formDto.dia==14">
+                                    <ng-template matStepLabel>{{title6}}</ng-template>
+                                    <h2>{{title6}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿En caso de emergencia, le gustaría recibir suero hiperinmune de pacientes Infectados por Covid-19 que han superado la enfermedad y ahora son NEGATIVOS ?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.recibirSuero" name="recibirSuero" class="vertical-radio-group" aria-label="¿En caso de emergencia, le gustaría recibir suero hiperinmune de pacientes Infectados por Covid-19 que han superado la enfermedad y ahora son NEGATIVOS ?">
+                                                <mat-radio-button *ngFor="let item of lista25" [value]="item.value" required>{{item.text}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Le gustaria voluntariamente donar su sangre una vez haya superado la enfermedad, para que lo utilizen otros pacientes en caso de emergencia?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.donarSangre" name="donarSangre" class="vertical-radio-group" aria-label="¿Le gustaria voluntariamente donar su sangre una vez haya superado la enfermedad, para que lo utilizen otros pacientes en caso de emergencia?">
+                                                <mat-radio-button *ngFor="let item of lista26" [value]="item.value" required>{{item.text}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title7}}</ng-template>
+                                    <h2>{{title7}}</h2>
+                                    <mat-form-field>
+                                        <!--<mat-label>¿Hay algo que desee comentarnos?</mat-label>-->
+                                        <input [(ngModel)]="formDto.comentarios" name="comentarios" matInput placeholder="¿Hay algo que desee comentarnos?" required>
+                                    </mat-form-field>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-success" matStepperNext>Siguiente</button>
+                                    </div>
+                                </mat-step>
+
+                                <mat-step *ngIf="!isInternado()">
+                                    <ng-template matStepLabel>{{title8}}</ng-template>
+                                    <h2>{{title8}}</h2>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-label>¿Paciente dado de Alta?</mat-label>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item>
+                                            <mat-radio-group [(ngModel)]="formDto.alta" name="alta" class="vertical-radio-group" aria-label="¿Paciente dado de Alta?">
+                                                <mat-radio-button *ngFor="let item of lista28" [value]="item" required>{{item}}</mat-radio-button>
+                                            </mat-radio-group>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+                                    </mat-list>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Atras</button>
+                                        <button mat-button class="btn btn-info" (click)="validateForm()">Guardar</button>
+                                    </div>
+                                </mat-step>
+                            </mat-vertical-stepper>
+
+
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>

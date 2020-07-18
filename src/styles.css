@@ -1,0 +1,6 @@
+/* You can add global styles to this file, and also import other style files */
+
+.main-panel .main-content {
+    margin-top: 0 !important;
+    padding: 0 !important;
+}

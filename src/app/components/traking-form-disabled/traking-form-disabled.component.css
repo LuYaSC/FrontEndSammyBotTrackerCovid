@@ -1,0 +1,52 @@
+.tp-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.map {
+    height: 500px;
+    padding: 0;
+    width: 100%;
+}
+
+.tp-radio-button {
+    margin: 5px;
+}
+
+.tp-selected-value {
+    margin: 15px 0;
+}
+
+.vertical-radio-group {
+    display: flex;
+    flex-direction: column;
+    /* display: inline-grid; */
+    /* display: grid; */
+    margin: 15px 0;
+}
+
+.mat-list-base .mat-list-item,
+.mat-list-base .mat-list-option {
+    height: auto;
+}
+
+.example-container .mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}
+
+.app-search-input {
+    margin-left: 8px;
+}
+
+.example-right-align {
+    text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+    display: none;
+}
+
+input.example-right-align {
+    -moz-appearance: textfield;
+}

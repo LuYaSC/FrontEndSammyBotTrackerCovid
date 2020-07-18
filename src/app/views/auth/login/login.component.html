@@ -1,0 +1,42 @@
+<mat-card class="fullscreen">
+    <mat-card-content style="height:100%">
+        <div class="container" style="height:100%">
+
+            <div class="row justify-content-center align-items-center" style="height:100%">
+                <div class="col col-md-4">
+                    <form>
+                        <div class="card">
+                            <div class="card-header card-header-success">
+                                <h4 class="card-title">Login</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <mat-error *ngIf="isError">
+                                    {{message}}
+                                </mat-error>
+                                <mat-form-field class="full-width-input">
+                                    <input matInput placeholder="Ingrese su usuario" [(ngModel)]="user.name" name="name" required>
+                                    <mat-error>
+                                        Por favor ingrese su nombre
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field class="full-width-input">
+                                    <input matInput placeholder="Ingrese su clave" [(ngModel)]="user.password" type="password" name="password" required>
+                                    <mat-error>
+                                        Por favor ingrese su apellido
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+                                <button mat-raised-button class="btn btn-success" (click)="onLogin()">Ingresar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<div class="alert alert-danger" *ngIf="loginInvalid">
+    <strong>Información!</strong> {{message}}.
+</div>

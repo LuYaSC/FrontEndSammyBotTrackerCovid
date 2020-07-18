@@ -1,0 +1,94 @@
+<div class="card-header card-header-success">
+    <h4 class="card-title">Ficha Técnica</h4>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+</div>
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-md-4">
+            <mat-form-field>
+                <mat-select placeholder="Seleccione el tipo de Búsqueda" name="filterType" [(ngModel)]="filterType" (ngModelChange)="handleChangeFilter()">
+                    <mat-option value="1">Buscar por CI.</mat-option>
+                    <mat-option value="2">Buscar por N° Celular</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="filterType=='1'">
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Cedula de Identidad" required name="phone" [(ngModel)]="patientsDto.ci">
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-4" *ngIf="filterType=='2'">
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="N° de Celular" required name="ci" [(ngModel)]="patientsDto.phone">
+            </mat-form-field>
+        </div>
+        <button mat-raised-button class="btn btn-purple" (click)="handleSearchPatients()">Buscar</button>
+    </div>
+
+    <div class="alert alert-info" *ngIf="isSuccess">
+        <strong>Información!</strong> {{message}}.
+    </div>
+
+    <div class="row" *ngIf="patientsResult.length > 0">
+        <div class="col-md-6">
+            <mat-form-field>
+                <mat-select placeholder="Seleccione fecha de ficha realizada." [(ngModel)]="technicalSheetDto.id" name="filterDate" (ngModelChange)="changeTechinalSheet()" required>
+                    <mat-option *ngFor="let item of patientsResult" [value]="item.id">
+                        {{item.controlDate | date:'dd-MM-yyyy h:mm:ss a'}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button class="btn btn-purple" (click)="handleGetTechnicalSheet()">Buscar</button>
+    </div>
+
+    <p class="text-danger" *ngIf="showMessageError"> No existen Registros. </p>
+
+    <div class="row" *ngIf="totalTechnicalSheet>0">
+        <div class="card card-plain">
+            <div class="card-header card-header-success">
+                <h4 class="card-title mt-0"> Lista de Ficha Técnica</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="">
+                            <th>Nombre de Factor</th>
+                            <th>Categoria</th>
+                            <th>Factor</th>
+                            <th>Fecha de Registro</th>
+                            <th>Confimado</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of technicalSheetResult">
+                                <td>{{item.factor}}</td>
+                                <td>{{item.categoryName}}</td>
+                                <td>{{item.presentFactor}}</td>
+                                <td>{{item.registerDate | date:'dd-MM-yyyy h:mm:ss a'}}</td>
+                                <td>{{item.confirmed}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="example-full-width">
+                <textarea matInput placeholder="Oservaciones" name="observation" [(ngModel)]="technicalSheetDto.observations"></textarea>
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <label>
+                <input type="checkbox" name="isTest" [(ngModel)]="isTest" value="false"> Cancelar Test
+            </label>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="btn btn-danger" mat-button (click)="onNoClick()" cdkFocusInitial>Cancelar</button>
+    <button mat-raised-button type="submit" class="btn btn-success pull-right" (click)="handleSaveTest()">GUARDAR</button>
+</div>
