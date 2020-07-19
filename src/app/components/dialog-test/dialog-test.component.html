@@ -150,7 +150,7 @@
             matInput
             [placeholder]="'Observaciones (' + observaciones.length + ')'"
             [(ngModel)]="observaciones"
-            rows="8"
+            rows="6"
           ></textarea>
         </mat-form-field>
         <div
@@ -159,6 +159,22 @@
           style="padding: 0;"
         >
           El campo Observaciones es requerido
+        </div>
+
+        <mat-form-field>
+          <textarea
+            matInput
+            [placeholder]="'Receta Medica (' + recetaMedica.length + ')'"
+            [(ngModel)]="recetaMedica"
+            rows="6"
+          ></textarea>
+        </mat-form-field>
+        <div
+          class="alert alert-danger"
+          *ngIf="recetaMedicaRequired"
+          style="padding: 0;"
+        >
+          El campo receta medica es requerido
         </div>
         <!--div
           class="alert alert-danger"
@@ -170,9 +186,10 @@
 
         <mat-checkbox [(ngModel)]="envioBrigada">
           <strong>
-            Si el caso amerita, ser notificado y enviado a una brigada de rescate, haga click
- en el Check e ingrese la dirección lo más detallada posible <br>
- con referencias explicitas del domicilio del paciente
+            Si el caso amerita, ser notificado y enviado a una brigada de
+            rescate, haga click en el Check e ingrese la dirección lo más
+            detallada posible <br />
+            con referencias explicitas del domicilio del paciente
           </strong>
         </mat-checkbox>
 
@@ -187,7 +204,7 @@
 
         <div
           class="alert alert-danger"
-          *ngIf="direecionRequired"
+          *ngIf="direccionRequired"
           style="padding: 0;"
         >
           El campo direccion del paciente es requerido

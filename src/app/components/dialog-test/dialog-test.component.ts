@@ -28,8 +28,10 @@ export class DialogTestComponent {
   doctorId: number;
   caseId: number;
   observaciones = "";
+  recetaMedica = "";
   observacionRequired = false;
-  direecionRequired = false;
+  direccionRequired = false;
+  recetaMedicaRequired = false;
   observacionMax = false;
   nombreInterno = "";
   nombreInternoRequired = false;
@@ -141,7 +143,8 @@ export class DialogTestComponent {
 
   finalice(state) {
     this.observacionRequired = false;
-    this.direecionRequired = false;
+    this.direccionRequired = false;
+    this.recetaMedicaRequired = false;
     this.observacionMax = false;
     this.nombreInternoRequired = false;
     this.nombreInternoMax = false;
@@ -154,8 +157,15 @@ export class DialogTestComponent {
       this.observacionRequired = true;
       errors.push("error");
     }
-    if (this.envioBrigada && (this.direccionPaciente === "" || this.direccionPaciente.trim() === "")) {      
-      this.direecionRequired = true;
+    if (this.recetaMedica === "" || this.recetaMedica.trim() === "") {
+      this.recetaMedicaRequired = true;
+      errors.push("error");
+    }
+    if (
+      this.envioBrigada &&
+      (this.direccionPaciente === "" || this.direccionPaciente.trim() === "")
+    ) {
+      this.direccionRequired = true;
       errors.push("error");
     }
 
@@ -178,6 +188,7 @@ export class DialogTestComponent {
       nombrePaciente: this.nombreInterno,
       envioBrigada: this.envioBrigada,
       direccionExplicita: this.direccionPaciente,
+      recetaMedica: this.recetaMedica,
     };
     this.isLoading = true;
     this.myCasesService.updateCase(request).subscribe(

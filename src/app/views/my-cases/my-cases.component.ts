@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MyCasesService } from 'app/services/my-cases/my-cases.service';
 import { MyCasesDto } from 'app/services/my-cases/models/my-cases-dto';
 import { MyCasesResult } from 'app/services/my-cases/models/my-cases-result';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogObservationsComponent } from 'app/components/dialog-observations/dialog-observations.component';
 
 @Component({
   selector: 'app-my-cases',
@@ -20,7 +22,9 @@ export class MyCasesComponent implements OnInit {
   isSuccess = false;
   isLoading = false;
 
-  constructor(private myCasesService: MyCasesService) { }
+  constructor(private myCasesService: MyCasesService, public dialog: MatDialog) { 
+    
+  }
 
   ngOnInit() {
     // this.handleGetCases();
@@ -47,6 +51,21 @@ export class MyCasesComponent implements OnInit {
       //console.log('no existen registros');
       this.isLoading = false;
     });
+  }
+
+  showDialog(item) {
+    const dialogRef = this.dialog.open(DialogObservationsComponent, {
+      width: "100%",
+      height: "600px",
+      data: item,
+    });
+
+    /*dialogRef.afterClosed().subscribe((result) => {
+      this.message = result;
+      this.isSuccess = true;
+      this.casesResult = [];
+      //this.handleGetCases(this.nivelSelected);
+    });*/
   }
 
 }

@@ -1,0 +1,20 @@
+<div class="card-header card-header-success">
+  <h4 class="card-title"><strong>INFORMACIÓN: {{data.nombrePaciente}}</strong></h4>
+</div>
+<div mat-dialog-content>
+  <p><strong>Observaciones: </strong></p>
+  <p>{{ data.observaciones }}</p>
+  <br>
+  <p><strong>Receta Medica:</strong></p>
+  <p>{{ data.recetaMedica }}</p>
+</div>
+<div mat-dialog-actions>
+  <button
+    class="btn btn-success"
+    mat-button
+    (click)="onNoClick()"
+    cdkFocusInitial
+  >
+    Aceptar
+  </button>
+</div>

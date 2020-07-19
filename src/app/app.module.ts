@@ -26,11 +26,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth/auth.service';
 import { CaseInAwaitComponent } from './views/case-in-await/case-in-await.component';
 import { MyCasesComponent } from './views/my-cases/my-cases.component';
-
-
-
-
-
+import { RecoverCaseComponent } from './views/recover-case/recover-case.component';
 
 @NgModule({
   imports: [
@@ -42,7 +38,6 @@ import { MyCasesComponent } from './views/my-cases/my-cases.component';
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
-    
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     }),
@@ -61,7 +56,7 @@ import { MyCasesComponent } from './views/my-cases/my-cases.component';
     EvolutionFormComponent,
     CaseInAwaitComponent,
     MyCasesComponent,
-    
+    RecoverCaseComponent,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

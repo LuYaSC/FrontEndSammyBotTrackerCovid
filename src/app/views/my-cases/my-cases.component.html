@@ -23,7 +23,6 @@
                         <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
                         <div class="row">
                             <div class="card card-plain">
-
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
@@ -36,8 +35,9 @@
                                                 <th>Fecha Atención</th>
                                                 <th>Finalizado</th>
                                                 <th>Inconcluso</th>
+                                                <!--<th>Observaciones</th>
+                                                <th>Receta Medica</th>-->
                                                 <th>Observaciones</th>
-                                                <!--th>Opción</th-->
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let item of casesResult; let i = index">
@@ -49,10 +49,11 @@
                                                     <td>{{item.fechaCreacion | date:'dd-MM-yyyy h:mm:ss a'}}</td>
                                                     <td>{{item.finalizado}}</td>
                                                     <td>{{item.inconcluso}}</td>
-                                                    <td>{{item.observaciones}}</td>
-                                                    <!--td>
-                                                        <button class="btn btn-primary">Ver detalle de ficha</button>
-                                                    </td-->
+                                                    <!--<td>{{item.observaciones}}</td>
+                                                    <td>{{item.recetaMedica}}</td>-->
+                                                    <td>
+                                                        <button class="btn btn-primary" (click)="showDialog(item)">Ver Observaciones</button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>

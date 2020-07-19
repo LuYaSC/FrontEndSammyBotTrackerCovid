@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TrakingFormDisabledComponent } from './traking-form-disabled/traking-form-disabled.component';
 import { DialogTestComponent } from './dialog-test/dialog-test.component';
+import { DialogObservationsComponent } from './dialog-observations/dialog-observations.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -30,6 +31,7 @@ import { DialogTestComponent } from './dialog-test/dialog-test.component';
     DataSeetDialogComponent,
     TrakingFormDisabledComponent,
     DialogTestComponent,
+    DialogObservationsComponent,
   ],
   exports: [
     FooterComponent,
