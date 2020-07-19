@@ -19,6 +19,7 @@ export let ROUTES: RouteInfo[] = [
     icon: "location_on",
     class: "",
     roles: ["CONSULTOR"],
+    
   },
   {
     path: "/my-cases",
