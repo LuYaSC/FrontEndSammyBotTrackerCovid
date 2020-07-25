@@ -51,7 +51,23 @@
                                                     <tr *ngFor="let item of casesResult; let i = index">
                                                         <td>{{i+1}}</td>
                                                         <td>{{item.numeroContacto}}</td>
-                                                        <td>{{item.descripcionNivel}}</td>
+                                                        <td>
+                                                            <font
+                                                              size="4"
+                                                              face="verdana"
+                                                              color="{{
+                                                                item.descripcionNivel === 4
+                                                                  ? 'red'
+                                                                  : item.descripcionNivel === 3
+                                                                  ? 'gold'
+                                                                  : item.descripcionNivel === 2
+                                                                  ? 'green'
+                                                                  : 'black'
+                                                              }}"
+                                                            >
+                                                              {{ item.descripcionNivel }}
+                                                            </font>
+                                                          </td>
                                                         <td>{{item.fechaCreacion | date:'dd-MM-yyyy h:mm:ss a'}}</td>
                                                         <td>{{item.horaInicio}}</td>
                                                         <td>{{item.horaFin}}</td>

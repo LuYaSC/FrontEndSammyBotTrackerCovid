@@ -50,7 +50,7 @@ export let ROUTES: RouteInfo[] = [
   },
   {
     path: "/captured-case",
-    title: "Captacion de Casos",
+    title: "Captacion  de asos",
     icon: "person",
     class: "",
     roles: ["INTERNO"],
@@ -136,6 +136,7 @@ export class SidebarComponent implements OnInit {
   }
 
   logout() {
+    debugger;
     this.globals.roles = [];
     this.authService.logout();
     this.router.navigate(["/auth/login"]);

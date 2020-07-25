@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MyCasesDto } from './models/my-cases-dto';
+import { GetDataDto } from './models/GetDataDto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MyCasesService {
-  
-  private baseUrl = 'https://localhost:44376/api/Telemedicine/';
+export class RecoverCaseService {
+
+  private baseUrl = 'http://localhost:64104/api/CasesRecovery/';
   public httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')
@@ -15,17 +15,17 @@ export class MyCasesService {
 
   constructor(public http: HttpClient) { }
 
-  getListCases(request: MyCasesDto) {
-    const url = this.baseUrl + 'GetPatientsAttended';
+  getCasesForRecovers(request: GetDataDto) {
+    const url = this.baseUrl + 'GetCasesForRecovers';
     return this.http.post(url, request, {headers: this.httpHeader});
   }
 
-  getListCasesInAwait(request: MyCasesDto) {
-    const url = this.baseUrl + 'GetPendingAppointments';
+  recoverCase(request: GetDataDto) {
+    const url = this.baseUrl + 'RecoverCase';
     return this.http.post(url, request, {headers: this.httpHeader});
   }
 
-  getById(id) {
+  /*getById(id) {
     const url = this.baseUrl + 'AssingCase';
     return this.http.post(url, {casoId:id}, {headers: this.httpHeader});
   }
@@ -42,5 +42,5 @@ export class MyCasesService {
   updateCase(request: any) {
     const url = this.baseUrl + 'UpdateCase';
     return this.http.post(url, request, {headers: this.httpHeader});
-  }
+  }*/
 }

@@ -53,7 +53,7 @@ export class MyCasesComponent implements OnInit {
     });
   }
 
-  showDialog(item) {
+  showDialog(item: MyCasesService) {
     const dialogRef = this.dialog.open(DialogObservationsComponent, {
       width: "100%",
       height: "600px",

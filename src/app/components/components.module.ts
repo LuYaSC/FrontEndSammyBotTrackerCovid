@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TrakingFormDisabledComponent } from './traking-form-disabled/traking-form-disabled.component';
 import { DialogTestComponent } from './dialog-test/dialog-test.component';
 import { DialogObservationsComponent } from './dialog-observations/dialog-observations.component';
+import { DialogRecoveryCaseComponent } from './dialog-recovery-case/dialog-recovery-case.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,6 +33,7 @@ import { DialogObservationsComponent } from './dialog-observations/dialog-observ
     TrakingFormDisabledComponent,
     DialogTestComponent,
     DialogObservationsComponent,
+    DialogRecoveryCaseComponent,
   ],
   exports: [
     FooterComponent,

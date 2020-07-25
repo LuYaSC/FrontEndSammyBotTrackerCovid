@@ -27,6 +27,7 @@ import { AuthService } from './services/auth/auth.service';
 import { CaseInAwaitComponent } from './views/case-in-await/case-in-await.component';
 import { MyCasesComponent } from './views/my-cases/my-cases.component';
 import { RecoverCaseComponent } from './views/recover-case/recover-case.component';
+import { CapturedCaseComponent } from './views/captured-case/captured-case.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { RecoverCaseComponent } from './views/recover-case/recover-case.componen
     CaseInAwaitComponent,
     MyCasesComponent,
     RecoverCaseComponent,
+    CapturedCaseComponent,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

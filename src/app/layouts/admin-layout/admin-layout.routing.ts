@@ -9,6 +9,8 @@ import { EvolutionFormComponent } from '../../views/evolution-form/evolution-for
 import { AuthGuard } from '../../guards/auth.guard';
 import { CaseInAwaitComponent } from '../../views/case-in-await/case-in-await.component';
 import { MyCasesComponent } from '../../views/my-cases/my-cases.component';
+import { RecoverCaseComponent } from 'app/views/recover-case/recover-case.component';
+import { CapturedCaseComponent } from 'app/views/captured-case/captured-case.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -20,5 +22,6 @@ export const AdminLayoutRoutes: Routes = [
     /*{ path: 'new-form',        component: NewFormComponent, canActivate: [AuthGuard] },
     { path: 'traking-form',        component: TrakingFormComponent, canActivate: [AuthGuard] },
     { path: 'evolution-form',        component: EvolutionFormComponent, canActivate: [AuthGuard] },*/
-    
+    { path: 'recover-case',        component: RecoverCaseComponent, canActivate: [AuthGuard] },
+    { path: 'captured-case',        component: CapturedCaseComponent, canActivate: [AuthGuard] },
 ];
