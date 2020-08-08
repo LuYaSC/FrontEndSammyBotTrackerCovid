@@ -38,13 +38,11 @@ export class RecoverCaseComponent implements OnInit {
   }
 
   handleGetCases(nivel: string) {
-    debugger;
     this.isLoading = true;
     let request = new GetDataDto();
     request.nivel = +nivel;
     this.recoverCasesService.getCasesForRecovers(request).subscribe(
       (resp: any) => {
-        debugger;
         if (resp.body == null) {
           this.isSuccess = true;
           this.message = "No se encontró ningun resultado.";
@@ -61,7 +59,7 @@ export class RecoverCaseComponent implements OnInit {
     );
   }
 
-  showDialog(item) {
+  showDialog(item: any) {
     const dialogRef = this.dialog.open(DialogRecoveryCaseComponent, {
       width: "100%",
       height: "600px",

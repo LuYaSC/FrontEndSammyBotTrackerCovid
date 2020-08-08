@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header card-header-success">
             <h4 class="card-title">
-              Casos por recuperar (dia): {{ currentDate | date: "dd-MM-yyyy" }}
+              Casos por recuperar (día): {{ currentDate | date: "dd-MM-yyyy" }}
             </h4>
           </div>
           <div class="card-body">
@@ -93,12 +93,20 @@
                               }}
                             </td>
                             <td>{{ item.observaciones }}</td>
-                            <td>
+                            <td *ngIf="!item.retomar">
                               <button
                                 class="btn btn-primary"
                                 (click)="showDialog(item)"
                               >
-                                Recuperar caso
+                                Recuperar Caso
+                              </button>
+                            </td>
+                            <td *ngIf="item.retomar">
+                              <button
+                                class="btn btn-success"
+                                (click)="showDialog(item)"
+                              >
+                                Retomar Caso
                               </button>
                             </td>
                           </tr>

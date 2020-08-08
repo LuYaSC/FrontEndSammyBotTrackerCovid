@@ -7,7 +7,7 @@ import { MyCasesDto } from './models/my-cases-dto';
 })
 export class MyCasesService {
   
-  private baseUrl = 'https://localhost:44376/api/Telemedicine/';
+  private baseUrl = 'https://servicios.alliviapp.com:444/TelemedicineSB/api/Telemedicine/';
   public httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')

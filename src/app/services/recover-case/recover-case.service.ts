@@ -7,7 +7,7 @@ import { GetDataDto } from './models/GetDataDto';
 })
 export class RecoverCaseService {
 
-  private baseUrl = 'http://localhost:64104/api/CasesRecovery/';
+  private baseUrl = 'https://servicios.alliviapp.com:444/RecoverCasesSB/api/CasesRecovery/';
   public httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')
@@ -22,6 +22,16 @@ export class RecoverCaseService {
 
   recoverCase(request: GetDataDto) {
     const url = this.baseUrl + 'RecoverCase';
+    return this.http.post(url, request, {headers: this.httpHeader});
+  }
+
+  generateRoom(request: GetDataDto) {
+    const url = this.baseUrl + 'GenerateRoom';
+    return this.http.post(url, request, {headers: this.httpHeader});
+  }
+
+  finalizeCase(request: GetDataDto) {
+    const url = this.baseUrl + 'FinalizeCase';
     return this.http.post(url, request, {headers: this.httpHeader});
   }
 

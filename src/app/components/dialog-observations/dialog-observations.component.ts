@@ -12,7 +12,7 @@ export class DialogObservationsComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MyCasesService
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     dialogRef.disableClose = true;
   }

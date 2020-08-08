@@ -48,13 +48,13 @@ export let ROUTES: RouteInfo[] = [
     class: "",
     roles: ["INTERNO"],
   },
-  {
-    path: "/captured-case",
-    title: "Captacion  de asos",
-    icon: "person",
-    class: "",
-    roles: ["INTERNO"],
-  },
+  // {
+  //   path: "/captured-case",
+  //   title: "Captacion  de asos",
+  //   icon: "person",
+  //   class: "",
+  //   roles: ["INTERNO"],
+  // },
 ];
 
 @Component({
@@ -110,13 +110,13 @@ export class SidebarComponent implements OnInit {
         class: "",
         roles: ["INTERNO"],
       },
-      {
-        path: "/captured-case",
-        title: "Casos Captados",
-        icon: "person",
-        class: "",
-        roles: ["INTERNO"],
-      },
+      // {
+      //   path: "/captured-case",
+      //   title: "Casos Captados",
+      //   icon: "person",
+      //   class: "",
+      //   roles: ["INTERNO"],
+      // },
     ];
     ROUTES.forEach((value, index) => {
       const hasPermission = this.globals.verifyPermission(value.roles);
@@ -136,7 +136,6 @@ export class SidebarComponent implements OnInit {
   }
 
   logout() {
-    debugger;
     this.globals.roles = [];
     this.authService.logout();
     this.router.navigate(["/auth/login"]);
