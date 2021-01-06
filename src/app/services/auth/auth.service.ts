@@ -7,12 +7,15 @@ import { GetTokenDto } from './models/get-token-dto';
 import { tap } from 'rxjs/operators'
 import * as jwt_decode from 'jwt-decode';
 import { TokenDecodeDto } from './models/token-decode-dto';
+import { environment } from 'environments/environment';
 
 
 @Injectable()
 export class AuthService {
+  base_url = environment.url.auth;
   //base_url = 'https://servicios.alliviapp.com:444/JwtAuthentication/oauth2';
-  base_url = 'https://servicios.alliviapp.com:444/JwtAuthenticationSB/oauth2';
+  /*base_url = '
+  ';*/
   authSubject = new BehaviorSubject(false);
   public token = '';
   getTokenDto: GetTokenDto = new GetTokenDto();

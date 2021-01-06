@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { FormDiagDto } from './models/form-diag-dto';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ParamsDto } from './models/params-dto';
-
-
-
-
+import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class TrakingFormService {
-
-  private baseUrl = 'https://servicios.alliviapp.com:444/Patients/api/Patient/';
+  private baseUrl = environment.url.dataSeet;
+  //private baseUrl = 'https://servicios.alliviapp.com:444/Patients/api/Patient/';
   private httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')

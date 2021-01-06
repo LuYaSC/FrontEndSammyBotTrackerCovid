@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 })
 export class MapsService {
   private baseUrl =
-    'https://servicios.alliviapp.com:444/DoctorVirtual.Georreferenciacion.Api/Api/Georreferenciacion/';
+    'https://servicios.medico.com.bo/DoctorVirtual.Georreferenciacion.Api/api/Georreferenciacion/';
   public httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     /*Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')*/
@@ -15,7 +15,7 @@ export class MapsService {
   constructor(public http: HttpClient) {}
 
   getLocations() {
-    //return this.http.post(this.getLocationsUrl, data, {headers: this.httpHeader});
+    // return this.http.post(this.getLocationsUrl, data, {headers: this.httpHeader});
     return this.http.post(this.baseUrl, null /*, {headers: this.httpHeader}*/);
   }
 

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetDataDto } from './models/GetDataDto';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecoverCaseService {
-
-  private baseUrl = 'https://servicios.alliviapp.com:444/RecoverCasesSB/api/CasesRecovery/';
+  private baseUrl = environment.url.recoverCase;
+  //private baseUrl = 'https://servicios.alliviapp.com:444/RecoverCasesSBDev/api/CasesRecovery/';
   public httpHeader = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `Bearer ` + localStorage.getItem('ACCESS_TOKEN')
