@@ -38,6 +38,7 @@ export class DialogTestComponent {
   nombreInternoMax = false;
   envioBrigada = false;
   direccionPaciente = "";
+  isValid: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DialogTestComponent>,
@@ -48,7 +49,7 @@ export class DialogTestComponent {
     dialogRef.disableClose = true;
     this.caseId = item.casoId;
     this.asignationCase();
-    this.getListDoctor();
+    // this.getListDoctor();
   }
 
   onNoClick(): void {
@@ -57,8 +58,6 @@ export class DialogTestComponent {
   onConfirmedClick(): void {
     this.dialogRef.close("accept");
   }
-
-  isValid: boolean;
 
   asignationCase() {
     this.myCasesService.getById(this.caseId).subscribe(

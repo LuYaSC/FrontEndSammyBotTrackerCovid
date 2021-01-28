@@ -28,6 +28,8 @@ import { CaseInAwaitComponent } from './views/case-in-await/case-in-await.compon
 import { MyCasesComponent } from './views/my-cases/my-cases.component';
 import { RecoverCaseComponent } from './views/recover-case/recover-case.component';
 import { CapturedCaseComponent } from './views/captured-case/captured-case.component';
+import { AdministrationComponent } from './views/administration/administration.component';
+import { NgbAlertModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
@@ -44,7 +46,10 @@ import { CapturedCaseComponent } from './views/captured-case/captured-case.compo
     }),
     LeafletModule,
     LeafletMarkerClusterModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    NgbPaginationModule,
+    NgbAlertModule
   ],
   declarations: [
     AppComponent,
@@ -59,6 +64,7 @@ import { CapturedCaseComponent } from './views/captured-case/captured-case.compo
     MyCasesComponent,
     RecoverCaseComponent,
     CapturedCaseComponent,
+    AdministrationComponent,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

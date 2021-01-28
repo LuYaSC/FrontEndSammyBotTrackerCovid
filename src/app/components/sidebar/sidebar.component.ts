@@ -21,6 +21,13 @@ export let ROUTES: RouteInfo[] = [
     roles: ["CONSULTOR"],
   },
   {
+    path: "/administration",
+    title: "Administración de usuarios",
+    icon: "person",
+    class: "",
+    roles: ["CONSULTOR"],
+  },
+  {
     path: "/my-cases",
     title: "Mis casos",
     icon: "dashboard",
@@ -41,13 +48,14 @@ export let ROUTES: RouteInfo[] = [
     class: "",
     roles: ["MEDICO", "INTERNO"],
   },
-  {
+  
+  /*{
     path: "/recover-case",
     title: "Recuperacion de Casos",
     icon: "person",
     class: "",
     roles: ["INTERNO"],
-  },
+  },*/
   // {
   //   path: "/captured-case",
   //   title: "Captacion  de asos",
@@ -83,6 +91,13 @@ export class SidebarComponent implements OnInit {
         roles: ["CONSULTOR"],
       },
       {
+        path: "/administration",
+        title: "Administración de usuarios",
+        icon: "person",
+        class: "",
+        roles: ["CONSULTOR"],
+      },
+      {
         path: "/my-cases",
         title: "Mis casos",
         icon: "dashboard",
@@ -103,13 +118,13 @@ export class SidebarComponent implements OnInit {
         class: "",
         roles: ["MEDICO", "INTERNO"],
       },
-      {
+      /*{
         path: "/recover-case",
         title: "Recuperacion de Casos",
         icon: "person",
         class: "",
         roles: ["INTERNO"],
-      },
+      },*/
       // {
       //   path: "/captured-case",
       //   title: "Casos Captados",

@@ -11,8 +11,9 @@ export const environment = {
     dataSeet: 'https://serviciosdev.medico.com.bo/Patients/api/Patient/',
     evolutionForm: 'https://serviciosdev.medico.com.bo/EvolutionForm/api/EvolutionForm/',
     recoverCase: 'https://serviciosdev.medico.com.bo/CaseRecovery/api/CasesRecovery/',
-    myCases: 'https://serviciosdev.medico.com.bo/Telemedicine/api/Telemedicine/',
+    myCases: 'https://localhost:44376/api/Telemedicine/',
     tracking: 'xxxxxxxxxxxxxxxxxxxxxxx',
-    maps: 'https://servicios.medico.com.bo/DoctorVirtual.Georreferenciacion.Api/api/Georreferenciacion/'
+    maps: 'https://servicios.medico.com.bo/DoctorVirtual.Georreferenciacion.Api/api/Georreferenciacion/',
+    administration: 'https://localhost:44370/api/Administration/'
   }
 };

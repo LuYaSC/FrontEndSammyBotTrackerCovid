@@ -11,6 +11,7 @@ import { CaseInAwaitComponent } from '../../views/case-in-await/case-in-await.co
 import { MyCasesComponent } from '../../views/my-cases/my-cases.component';
 import { RecoverCaseComponent } from 'app/views/recover-case/recover-case.component';
 import { CapturedCaseComponent } from 'app/views/captured-case/captured-case.component';
+import { AdministrationComponent } from 'app/views/administration/administration.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -24,4 +25,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'evolution-form',        component: EvolutionFormComponent, canActivate: [AuthGuard] },*/
     { path: 'recover-case',        component: RecoverCaseComponent, canActivate: [AuthGuard] },
     { path: 'captured-case',        component: CapturedCaseComponent, canActivate: [AuthGuard] },
+    { path: 'administration',        component: AdministrationComponent, canActivate: [AuthGuard] },
 ];
