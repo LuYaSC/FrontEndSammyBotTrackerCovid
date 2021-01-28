@@ -54,7 +54,7 @@
     "font-awesome": "^4.7.0",
     "googleapis": "40.0.0",
     "hammerjs": "2.0.8",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jwt-decode": "^2.2.0",
     "leaflet": "^1.6.0",
     "leaflet-easybutton": "^2.4.0",
