@@ -9,20 +9,14 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-2 col-xs-6">
-                <button
-                  type="button"
-                  class="btn btn-block btn-outline-primary btn-xs"
-                  (click)="openUserDates(userContent, false)"
-                >
+                <button type="button" class="btn btn-block btn-outline-primary btn-xs"
+                  (click)="openUserDates(userContent, null, false)">
                   Crear Usuario
                 </button>
               </div>
               <div class="col-md-3 col-xs-6">
-                <button
-                  type="button"
-                  class="btn btn-block btn-outline-success btn-xs"
-                  (click)="openEnableAllUsers(enableAllUsersContent)"
-                >
+                <button type="button" class="btn btn-block btn-outline-success btn-xs"
+                  (click)="openEnableAllUsers(enableAllUsersContent)">
                   Desbloquear todos los usuarios
                 </button>
               </div>
@@ -53,15 +47,8 @@
                     <div class="row">
                       <div class="col-md-5">
                         <div class="form-group">
-                          <label class="bmd-label-floating"
-                            >Estado de Usuario</label
-                          >
-                          <select
-                            class="form-control"
-                            [(ngModel)]="dtoGetUsers.state"
-                            name="nivelSelected"
-                            required
-                          >
+                          <label class="bmd-label-floating">Estado de Usuario</label>
+                          <select class="form-control" [(ngModel)]="dtoGetUsers.state" name="nivelSelected" required>
                             <option value="">Todos</option>
                             <option value="G">Activos</option>
                             <option value="B">Bloqueados</option>
@@ -81,30 +68,18 @@
                       </div>
                       <div class="col-md-5">
                         <div class="form-group">
-                          <label class="bmd-label-floating"
-                            >Matrícula Médica</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            [(ngModel)]="dtoGetUsers.accessNumber"
-                          />
+                          <label class="bmd-label-floating">Matrícula Médica</label>
+                          <input type="text" class="form-control" [(ngModel)]="dtoGetUsers.accessNumber" />
                         </div>
                       </div>
-                      <button
-                        mat-raised-button
-                        class="btn btn-primary"
-                        (click)="handleGetUsers(statusSelected)"
-                      >
+                      <button mat-raised-button class="btn btn-primary" (click)="handleGetUsers()">
                         Buscar
                       </button>
                     </div>
 
                     <br />
-                    <mat-progress-bar
-                      *ngIf="listUsers.length <= 0 && isLoading"
-                      mode="indeterminate"
-                    ></mat-progress-bar>
+                    <mat-progress-bar *ngIf="listUsers.length <= 0 && isLoading" mode="indeterminate">
+                    </mat-progress-bar>
                     <div *ngIf="listUsers.length > 0">
                       <div class="table-responsive">
                         <table class="table table-hover">
@@ -118,7 +93,7 @@
                             <th>Estado</th>
                             <th>Editar</th>
                             <th>Desbloqueo</th>
-                            <th>Eliminar</th>
+                            <th>Deshabilitar</th>
                           </thead>
                           <tbody>
                             <tr *ngFor="let item of listUsers">
@@ -137,17 +112,13 @@
                                 }}
                               </td>
                               <td>
-                                <font
-                                  size="4"
-                                  face="verdana"
-                                  color="{{
+                                <font size="4" face="verdana" color="{{
                                     item.state === 'B'
                                       ? 'red'
                                       : item.state === 'G'
                                       ? 'green'
                                       : 'Sin estado'
-                                  }}"
-                                >
+                                  }}">
                                   {{
                                     item.state === "B"
                                       ? "Bloqueado"
@@ -158,36 +129,24 @@
                                 </font>
                               </td>
                               <td>
-                                <button
-                                  class="btn btn-primary"
-                                  (click)="
+                                <button class="btn btn-primary" (click)="
                                     openUserDates(userContent, item, true)
-                                  "
-                                >
+                                  ">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
                               </td>
                               <td *ngIf="item.state === 'G'">
-                                <button
-                                  class="btn btn-warning"
-                                  (click)="openManageUser(content, item, false)"
-                                >
+                                <button class="btn btn-warning" (click)="openManageUser(content, item, false)">
                                   <i class="bi bi-person-check-fill"></i>
                                 </button>
                               </td>
                               <td *ngIf="item.state === 'B'">
-                                <button
-                                  class="btn btn-info"
-                                  (click)="openManageUser(content, item, false)"
-                                >
+                                <button class="btn btn-info" (click)="openManageUser(content, item, false)">
                                   <i class="bi bi-person-dash"></i>
                                 </button>
                               </td>
                               <td>
-                                <button
-                                  class="btn btn-danger"
-                                  (click)="openManageUser(content, item, true)"
-                                >
+                                <button class="btn btn-danger" (click)="openManageUser(content, item, true)">
                                   <i class="bi bi-person-dash"></i>
                                 </button>
                               </td>
@@ -206,23 +165,13 @@
     </div>
   </div>
 </div>
-<ngb-pagination
-  class="d-flex justify-content-center"
-  [(page)]="dtoGetUsers.curPage"
-  [pageSize]="dtoGetUsers.pageSize"
-  [collectionSize]="total"
-  (pageChange)="handlepag()"
-></ngb-pagination>
+<ngb-pagination class="d-flex justify-content-center" [(page)]="dtoGetUsers.curPage" [pageSize]="dtoGetUsers.pageSize"
+  [collectionSize]="total" (pageChange)="handlepag()"></ngb-pagination>
 
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Información</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -233,11 +182,7 @@
     <button type="button" class="btn btn-success" (click)="manageUser()">
       Aceptar
     </button>
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.close('Close click')"
-    >
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">
       Cancelar
     </button>
   </div>
@@ -246,12 +191,7 @@
 <ng-template #userContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Datos de Usuario</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="close" aria-label="Close" (click)="this.isValid = true; this.messageValidation = ''; modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -260,21 +200,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Matrícula Médica</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.accessNumber"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.accessNumber" />
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Nombre</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.name"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.name" />
         </div>
       </div>
     </div>
@@ -282,21 +214,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Apellido Paterno</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.firstLastName"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.firstLastName" />
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Apellido Materno</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.secondLastName"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.secondLastName" />
         </div>
       </div>
     </div>
@@ -304,21 +228,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Email</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.email"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.email" />
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label class="bmd-label-floating">Celular</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="dtoUserManager.phoneNumber"
-          />
+          <input type="text" class="form-control" [(ngModel)]="dtoUserManager.phoneNumber" />
         </div>
       </div>
     </div>
@@ -326,36 +242,43 @@
       <div class="col-md-6" *ngIf="this.isCreated">
         <div class="form-group">
           <label class="bmd-label-floating">Cedula de Identidad + Ext</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="passwordUser"
-          />
+          <input type="text" class="form-control" [(ngModel)]="passwordUser" />
         </div>
       </div>
       <div class="col-md-6">
         <label class="bmd-label-floating">Roles</label>
         <section class="example-section">
-          <mat-checkbox class="example-margin" [(ngModel)]="isQuery"
-            >Consultor
+          <mat-checkbox class="example-margin" [(ngModel)]="isQuery">Consultor
           </mat-checkbox>
           <br />
-          <mat-checkbox class="example-margin" [(ngModel)]="isDoctor"
-            >Doctor
+          <mat-checkbox class="example-margin" [(ngModel)]="isDoctor">Doctor
           </mat-checkbox>
         </section>
       </div>
     </div>
+    <br>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="alert alert-warning" *ngIf="!isValid">
+          <strong>Información!</strong> <br>
+          <div [innerHTML]="messageValidation"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <mat-progress-bar *ngIf="isCharge" mode="indeterminate">
+        </mat-progress-bar>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn {{this.isCreated ? 'btn-success' : 'btn-info'}}" (click)="this.isCreated ? createUser() : manageUser()">
-        {{this.isCreated ? 'Crear ' : 'Modificar '}} Usuario
-      </button>
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.close('Close click')"
-    >
+    <button type="button" class="btn {{this.isCreated ? 'btn-success' : 'btn-info'}}"
+    [disabled]="isCharge"
+      (click)="this.isCreated ? createUser() : modifyUser()">
+      {{this.isCreated ? 'Crear ' : 'Modificar '}} Usuario
+    </button>
+    <button type="button" class="btn btn-danger" (click)="this.isValid = true; this.messageValidation = ''; modal.close('Close click')">
       Cancelar
     </button>
   </div>
@@ -364,12 +287,7 @@
 <ng-template #enableAllUsersContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Información</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -380,11 +298,7 @@
     <button type="button" class="btn btn-success" (click)="enableAllUsers()">
       Aceptar
     </button>
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.close('Close click')"
-    >
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">
       Cancelar
     </button>
   </div>

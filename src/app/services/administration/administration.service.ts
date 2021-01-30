@@ -45,4 +45,9 @@ export class AdministrationService {
     const url = this.baseUrl + 'UnlockAllUsers';
     return this.http.post(url, '', { headers: this.httpHeader });
   }
+
+  updateUser(dto: GetUserDto) {
+    const url = this.baseUrl + 'UpdateUser';
+    return this.http.post(url, dto, { headers: this.httpHeader });
+  }
 }

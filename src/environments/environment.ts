@@ -14,6 +14,6 @@ export const environment = {
     myCases: 'https://localhost:44376/api/Telemedicine/',
     tracking: 'xxxxxxxxxxxxxxxxxxxxxxx',
     maps: 'https://servicios.medico.com.bo/DoctorVirtual.Georreferenciacion.Api/api/Georreferenciacion/',
-    administration: 'https://localhost:44370/api/Administration/'
+    administration: 'https://serviciosdev.medico.com.bo/Administration/api/Administration/'
   }
 };
