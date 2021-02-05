@@ -73,6 +73,7 @@ export class DialogTestComponent {
           this.idControl = resp.body.idControl;
           this.urlSala = resp.body.urlSala;
           this.getTest();
+          this.getListDoctor();
         }
         this.isLoading = false;
       },
@@ -113,7 +114,7 @@ export class DialogTestComponent {
           this.doctors = resp.body;
         }
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -132,7 +133,7 @@ export class DialogTestComponent {
           this.messageDoctor = resp.body;
         }
       },
-      (error) => {}
+      (error) => { }
     );
   }
 

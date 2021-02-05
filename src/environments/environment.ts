@@ -10,7 +10,7 @@ export const environment = {
     capturedCase: 'https://serviciosdev.medico.com.bo/CaseRecovery/api/RecoverCase/',
     dataSeet: 'https://serviciosdev.medico.com.bo/Patients/api/Patient/',
     evolutionForm: 'https://serviciosdev.medico.com.bo/EvolutionForm/api/EvolutionForm/',
-    recoverCase: 'https://serviciosdev.medico.com.bo/CaseRecovery/api/CasesRecovery/',
+    recoverCase: 'http://localhost:64104/api/CasesRecovery/',
     myCases: 'https://localhost:44376/api/Telemedicine/',
     tracking: 'xxxxxxxxxxxxxxxxxxxxxxx',
     maps: 'https://servicios.medico.com.bo/DoctorVirtual.Georreferenciacion.Api/api/Georreferenciacion/',

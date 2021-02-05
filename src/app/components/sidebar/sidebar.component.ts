@@ -22,7 +22,7 @@ export let ROUTES: RouteInfo[] = [
   },
   {
     path: "/administration",
-    title: "Administración de usuarios",
+    title: "Módulo de usuarios",
     icon: "person",
     class: "",
     roles: ["CONSULTOR"],
@@ -92,7 +92,7 @@ export class SidebarComponent implements OnInit {
       },
       {
         path: "/administration",
-        title: "Administración de usuarios",
+        title: "Módulo de usuarios",
         icon: "person",
         class: "",
         roles: ["CONSULTOR"],
