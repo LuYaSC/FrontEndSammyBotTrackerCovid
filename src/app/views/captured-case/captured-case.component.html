@@ -1,1 +1,501 @@
-<p>captured-case works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card card-plain">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title">Creacion de casos - Fecha: {{currentDate | date:'dd-MM-yyyy'}}</h4>
+                        </div>
+                        <div class="card-body col-md-12">
+                            <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+                            <!--formulario de creacion de caso-->
+                            <div class="container-fluid" *ngIf="!isCreatedCase">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Celular</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="createCaseDto.phoneNumber" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Cedula de Identidad</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="createCaseDto.documentNumber" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Nivel de emergencia</label>
+                                            <select class="form-control" [(ngModel)]="createCaseDto.level"
+                                                name="nivelSelected" required>
+                                                <option value="2">2 (Emergencia Baja)</option>
+                                                <option value="3">3 (Emergencia Moderada)</option>
+                                                <option value="4">4 (Emergencia Alta)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Caso captado a través de</label>
+                                            <select class="form-control" [(ngModel)]="createCaseDto.origin"
+                                                name="nivelSelected" required>
+                                                <option value="Facebook">Facebook</option>
+                                                <option value="WhatsApp">WhatsApp</option>
+                                                <option value="Contacto por Telefono">Contacto por Telefono</option>
+                                                <option value="Referencia de otra Persona">Referencia de otra Persona
+                                                </option>
+                                                <option value="Otro">Otro</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button mat-raised-button class="btn btn-info" (click)="createCase()">Crear
+                                            Caso</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container-fluid" *ngIf="isCreatedCase">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h3>Información paciente</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="alert alert-info" *ngIf="!previousCaseValid">
+                                                    <strong>Información!</strong> El paciente no tiene historial de
+                                                    atenciones en SammyBot.
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Cédula de
+                                                        Identidad</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" readonly class="form-control-plaintext"
+                                                            value="{{responseCreateCase.documentNumber}}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Celular</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" readonly class="form-control-plaintext"
+                                                            value="{{responseCreateCase.phoneNumber}}">
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="responseCreateCase.isInsurance">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Nombre
+                                                            Paciente</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                value="{{responseCreateCase.namePatient}}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Fecha de
+                                                            Nacimiento</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                value="{{responseCreateCase.bornDate}}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Seguro de
+                                                            Salud</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                value="{{responseCreateCase.insuranceName}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Departamento</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                value="{{responseCreateCase.departament}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Municipio</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                value="{{responseCreateCase.municipality}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-body">
+                                                <div class="embed-container">
+                                                    <iframe frameborder="0" allowfullscreen allow="camera;microphone"
+                                                        src="https://servicios.medico.com.bo/DoctorVirtual.Telemedicina/?roomName=591682168801613602072&UserName=sedes"
+                                                        title="Cita Médica"></iframe>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" *ngIf="previousCaseValid">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h3>Historial del paciente</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Doctor y
+                                                        Fecha</label>
+                                                    <div class="col-sm-8">
+                                                        <mat-select placeholder="Casos Previos"
+                                                            [(ngModel)]="previousCaseDto.caseId"
+                                                            (ngModelChange)="getHistoricalCase()" required>
+                                                            <mat-option *ngFor="let prev of listPreviousAttentions"
+                                                                [value]="prev.caseId">
+                                                                {{ prev.assignedDoctor }} - {{prev.dateAttention |
+                                                                date:'dd/MM/yyyy hh:mm:ss a'}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Ver ultima ficha
+                                                        técnica</label>
+                                                    <div class="col-sm-3">
+                                                        <button type="button" class="btn btn-success"
+                                                            (click)="handleSeeTecnical(content)">
+                                                            Detalles
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Doctor
+                                                        asignado
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" readonly class="form-control-plaintext"
+                                                            value="{{previousCaseResult.doctorAttended}}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Fecha de
+                                                        atención</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" readonly class="form-control-plaintext"
+                                                            value="{{previousCaseResult.dateAttention |
+                                                                date:'dd/MM/yyyy hh:mm:ss a'}}">
+                                                    </div>
+                                                </div>-->
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Observaciones</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" readonly rows="5"
+                                                            value="{{previousCaseResult.observations}}"></textarea>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Receta
+                                                        Medica</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" readonly rows="5"
+                                                            value="{{previousCaseResult.prescription}}"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">¿Fue
+                                                        derivado a una brigada?</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" readonly class="form-control-plaintext"
+                                                            value="{{previousCaseResult.isBrigade ? 'SI': 'NO'}}">
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h3>Datos de la consulta</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group row">
+                                                    <label for="exampleInputEmail1">NombrePaciente</label>
+                                                    <input type="text" class="form-control"  [(ngModel)]="nombreInterno"
+                                                        placeholder="Ingrese el Nombre del paciente">
+                                                    <div class="alert alert-danger" *ngIf="nombreInternoRequired"
+                                                        style="padding: 0;">
+                                                        El campo Nombre de paciente es requerido
+                                                    </div>
+                                                    <div class="alert alert-danger" *ngIf="nombreInternoMax"
+                                                        style="padding: 0;">
+                                                        Max. 60 caracteres
+                                                    </div>
+                                                </div>
+                                                <label class="col-sm-4 col-form-label">Observaciones</label>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" rows="6" [(ngModel)]="observaciones"></textarea>
+                                                        <div class="alert alert-danger" *ngIf="observacionRequired" style="padding: 0;">
+                                                            El campo Observaciones es requerido
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                                <label class="col-sm-4 col-form-label">Receta Médica</label>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" rows="6" [(ngModel)]="recetaMedica"></textarea>
+                                                        <div class="alert alert-danger" *ngIf="recetaMedicaRequired" style="padding: 0;">
+                                                            El campo receta medica es requerido
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                                <label class="col-sm-4 col-form-label">Envio a Brigada</label>
+                                                <div class="form-group row">
+                                                    <mat-checkbox [(ngModel)]="envioBrigada">
+                                                        <strong>
+                                                            Si el caso es una emergencia medica, hacer click en este
+                                                            check
+                                                        </strong>
+                                                    </mat-checkbox>
+                                                </div>
+                                                <div *ngIf="envioBrigada">
+                                                    <label class="col-sm-4 col-form-label">Direccion Especifica del
+                                                        paciente</label>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-12">
+                                                            <textarea class="form-control" rows="4" [(ngModel)]="direccionPaciente"></textarea>
+                                                            <div class="alert alert-danger" *ngIf="direccionRequired" style="padding: 0;">
+                                                                El campo direccion del paciente es requerido
+                                                              </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-success" mat-button (click)="finalice(true)" [disabled]="disabledEnd"
+                                                    cdkFocusInitial>
+                                                    Atendido
+                                                </button>
+                                                <button class="btn btn-warning" mat-button (click)="finalice(false)" [disabled]="disabledEnd"
+                                                    cdkFocusInitial>
+                                                    Inconcluso
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="row" *ngIf="technicalSheetValid">
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <p>
+                                                <h3>Sintomatología</h3>
+                                                <h5>(si relleno la encuenta)</h5>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead class="">
+                                                            <th>Nombre de Factor</th>
+                                                            <th>Categoria</th>
+                                                            <th>Factor</th>
+                                                            <th>Fecha de Registro</th>
+                                                            <th>Confimado</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of technicalSheetResult">
+                                                                <td>{{item.factor}}</td>
+                                                                <td>{{item.categoryName}}</td>
+                                                                <td>{{item.presentFactor}}</td>
+                                                                <td>{{item.registerDate | date:'dd-MM-yyyy h:mm:ss a'}}
+                                                                </td>
+                                                                <td>{{item.confirmed}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Información</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <p>
+                <h3>Sintomatología</h3>
+                <h5>(si relleno la encuesta)</h5>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="">
+                            <th>Nombre de Factor</th>
+                            <th>Categoria</th>
+                            <th>Factor</th>
+                            <th>Fecha de Registro</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of technicalSheetResult">
+                                <td>{{item.factor}}</td>
+                                <td>{{item.categoryName}}</td>
+                                <td>{{item.presentFactor}}</td>
+                                <td>{{item.registerDate | date:'dd-MM-yyyy h:mm:ss a'}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modal.close('Close click')">
+            Aceptar
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #userContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Datos de Usuario</h4>
+        <button type="button" class="close" aria-label="Close"
+            (click)="this.isValid = true; this.messageValidation = ''; modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Matrícula Médica</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.accessNumber" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Nombre</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.name" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Apellido Paterno</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.firstLastName" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Apellido Materno</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.secondLastName" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Email</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.email" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Celular</label>
+                    <input type="text" class="form-control" [(ngModel)]="dtoUserManager.phoneNumber" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" *ngIf="this.isCreated">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Cedula de Identidad + Ext</label>
+                    <input type="text" class="form-control" [(ngModel)]="passwordUser" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="bmd-label-floating">Roles</label>
+                <section class="example-section">
+                    <mat-checkbox class="example-margin" [(ngModel)]="isQuery">Consultor
+                    </mat-checkbox>
+                    <br />
+                    <mat-checkbox class="example-margin" [(ngModel)]="isDoctor">Doctor
+                    </mat-checkbox>
+                </section>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="alert alert-warning" *ngIf="!isValid">
+                    <strong>Información!</strong> <br>
+                    <div [innerHTML]="messageValidation"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <mat-progress-bar *ngIf="isCharge" mode="indeterminate">
+                </mat-progress-bar>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn {{this.isCreated ? 'btn-success' : 'btn-info'}}" [disabled]="isCharge"
+            (click)="this.isCreated ? createUser() : modifyUser()">
+            {{this.isCreated ? 'Crear ' : 'Modificar '}} Usuario
+        </button>
+        <button type="button" class="btn btn-danger"
+            (click)="this.isValid = true; this.messageValidation = ''; modal.close('Close click')">
+            Cancelar
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #enableAllUsersContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Información</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>{{ messageModal }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="enableAllUsers()">
+            Aceptar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">
+            Cancelar
+        </button>
+    </div>
+</ng-template>

@@ -30,6 +30,8 @@ import { RecoverCaseComponent } from './views/recover-case/recover-case.componen
 import { CapturedCaseComponent } from './views/captured-case/captured-case.component';
 import { AdministrationComponent } from './views/administration/administration.component';
 import { NgbAlertModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormCreateCaseComponent } from './Views/captured-case/components/form-create-case/form-create-case.component';
+import { DetailCapturedCaseComponent } from './Views/captured-case/components/detail-captured-case/detail-captured-case.component';
 
 @NgModule({
   imports: [
@@ -65,6 +67,8 @@ import { NgbAlertModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng
     RecoverCaseComponent,
     CapturedCaseComponent,
     AdministrationComponent,
+    FormCreateCaseComponent,
+    DetailCapturedCaseComponent,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

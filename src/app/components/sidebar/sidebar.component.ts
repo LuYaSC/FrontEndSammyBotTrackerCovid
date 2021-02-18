@@ -48,7 +48,7 @@ export let ROUTES: RouteInfo[] = [
     class: "",
     roles: ["MEDICO", "INTERNO"],
   },
-  
+
   /*{
     path: "/recover-case",
     title: "Recuperacion de Casos",
@@ -56,13 +56,13 @@ export let ROUTES: RouteInfo[] = [
     class: "",
     roles: ["INTERNO"],
   },*/
-  // {
-  //   path: "/captured-case",
-  //   title: "Captacion  de asos",
-  //   icon: "person",
-  //   class: "",
-  //   roles: ["INTERNO"],
-  // },
+  {
+    path: "/captured-case",
+    title: "Captacion de Casos",
+    icon: "person",
+    class: "",
+    roles: ["INTERNO"],
+  },
 ];
 
 @Component({
@@ -78,7 +78,7 @@ export class SidebarComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     public globals: Globals
-  ) {}
+  ) { }
 
   ngOnInit() {
     let routes: RouteInfo[] = [];
@@ -125,13 +125,13 @@ export class SidebarComponent implements OnInit {
         class: "",
         roles: ["INTERNO"],
       },*/
-      // {
-      //   path: "/captured-case",
-      //   title: "Casos Captados",
-      //   icon: "person",
-      //   class: "",
-      //   roles: ["INTERNO"],
-      // },
+      {
+        path: "/captured-case",
+        title: "Captacion de Casos",
+        icon: "person",
+        class: "",
+        roles: ["INTERNO"],
+      },
     ];
     ROUTES.forEach((value, index) => {
       const hasPermission = this.globals.verifyPermission(value.roles);

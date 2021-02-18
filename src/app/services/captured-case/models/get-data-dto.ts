@@ -1,3 +1,6 @@
 export class GetDataDto {
-    universidadId: number;
+    phoneNumber: string;
+    documentNumber: string;
+    level: number;
+    origin: string;
 }

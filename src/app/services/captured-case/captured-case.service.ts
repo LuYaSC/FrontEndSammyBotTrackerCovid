@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { GetDataDto } from '../recover-case/models/GetDataDto';
+import { GetDataDto } from '../captured-case/models/get-data-dto';
 import { environment } from 'environments/environment';
+import { PreviousCaseDto } from './models/previous-case-dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,18 +16,13 @@ export class CapturedCaseService {
 
   constructor(public http: HttpClient) { }
 
-  getUniversities() {
-    const url = this.baseUrl + 'GetUniversities';
-    return this.http.post(url, '', {headers: this.httpHeader});
-  }
-
-  getInterns(request: GetDataDto) {
-    const url = this.baseUrl + 'GetInterns';
+  capturedCase(request: GetDataDto) {
+    const url = this.baseUrl + 'CreateCase';
     return this.http.post(url, request, {headers: this.httpHeader});
   }
 
-  /*getCasesCaptured(request: GetDataDto) {
-    const url = this.baseUrl + 'GetCasesForRecovers';
+  getHistoricalCase(request: PreviousCaseDto) {
+    const url = this.baseUrl + 'GetPreviousCase';
     return this.http.post(url, request, {headers: this.httpHeader});
-  }*/
+  }
 }

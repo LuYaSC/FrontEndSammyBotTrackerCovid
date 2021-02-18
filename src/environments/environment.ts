@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   url: {
     auth: 'https://serviciosdev.medico.com.bo/JwtAuthenticationSB/oauth2',
-    capturedCase: 'https://serviciosdev.medico.com.bo/CaseRecovery/api/RecoverCase/',
+    capturedCase: 'https://localhost:44363/api/CapturedCases/',
     dataSeet: 'https://serviciosdev.medico.com.bo/Patients/api/Patient/',
     evolutionForm: 'https://serviciosdev.medico.com.bo/EvolutionForm/api/EvolutionForm/',
     recoverCase: 'http://localhost:64104/api/CasesRecovery/',
