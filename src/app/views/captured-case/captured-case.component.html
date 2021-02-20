@@ -2,11 +2,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-
                 <div class="card card-plain">
                     <div class="card">
                         <div class="card-header card-header-success">
-                            <h4 class="card-title">Creacion de casos - Fecha: {{currentDate | date:'dd-MM-yyyy'}}</h4>
+                            <h4 class="card-title">Creacion de casos - Fecha: {{currentDate | date :'dd-MM-yyyy'}}</h4>
                         </div>
                         <div class="card-body col-md-12">
                             <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
@@ -16,15 +15,24 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Celular</label>
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control" minlength="3" maxlength="8" appOnlyInteger
                                                 [(ngModel)]="createCaseDto.phoneNumber" required />
+                                            <div class="alert alert-danger" *ngIf="phoneRequired" style="padding: 0;">
+                                                El campo Celular es requerido
+                                            </div>
+                                            <div class="alert alert-danger" *ngIf="minPhone" style="padding: 0;">
+                                                El campo Celular debe tener minimo 4 caracteres
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Cedula de Identidad</label>
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control" minlength="5" maxlength="8" appOnlyInteger
                                                 [(ngModel)]="createCaseDto.documentNumber" required />
+                                            <div class="alert alert-danger" *ngIf="ciRequired" style="padding: 0;">
+                                                El campo Documento es requerido
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -55,12 +63,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <button mat-raised-button class="btn btn-info" (click)="createCase()">Crear
+                                        <button mat-raised-button class="btn btn-info" [disabled]="isLoading"
+                                            (click)="createCase()">Crear
                                             Caso</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="container-fluid" *ngIf="isCreatedCase">
+                            <div class="container-fluid" *ngIf="isCreatedCase" [disabled]="disabledEnd">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="panel panel-info">
@@ -132,12 +141,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" [disabled]="disabledEnd">
                                         <div class="panel panel-primary">
                                             <div class="panel-body">
                                                 <div class="embed-container">
                                                     <iframe frameborder="0" allowfullscreen allow="camera;microphone"
-                                                        src="https://servicios.medico.com.bo/DoctorVirtual.Telemedicina/?roomName=591682168801613602072&UserName=sedes"
+                                                        [src]="responseCreateCase.urlRoom | safe"
                                                         title="Cita Médica"></iframe>
                                                 </div>
 
@@ -177,28 +186,10 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <!--<div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label">Doctor
-                                                        asignado
-                                                    </label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" readonly class="form-control-plaintext"
-                                                            value="{{previousCaseResult.doctorAttended}}">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label">Fecha de
-                                                        atención</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" readonly class="form-control-plaintext"
-                                                            value="{{previousCaseResult.dateAttention |
-                                                                date:'dd/MM/yyyy hh:mm:ss a'}}">
-                                                    </div>
-                                                </div>-->
                                                 <div class="form-group row">
                                                     <label class="col-sm-4 col-form-label">Observaciones</label>
                                                     <div class="col-sm-8">
-                                                        <textarea class="form-control" readonly rows="5"
+                                                        <textarea class="form-control" readonly rows="8"
                                                             value="{{previousCaseResult.observations}}"></textarea>
 
                                                     </div>
@@ -207,7 +198,7 @@
                                                     <label class="col-sm-4 col-form-label">Receta
                                                         Medica</label>
                                                     <div class="col-sm-8">
-                                                        <textarea class="form-control" readonly rows="5"
+                                                        <textarea class="form-control" readonly rows="8"
                                                             value="{{previousCaseResult.prescription}}"></textarea>
                                                     </div>
                                                 </div>
@@ -231,8 +222,8 @@
                                             </div>
                                             <div class="panel-body">
                                                 <div class="form-group row">
-                                                    <label for="exampleInputEmail1">NombrePaciente</label>
-                                                    <input type="text" class="form-control"  [(ngModel)]="nombreInterno"
+                                                    <label for="exampleInputEmail1">Nombre Paciente</label>
+                                                    <input type="text" class="form-control" [(ngModel)]="nombreInterno"
                                                         placeholder="Ingrese el Nombre del paciente">
                                                     <div class="alert alert-danger" *ngIf="nombreInternoRequired"
                                                         style="padding: 0;">
@@ -246,19 +237,23 @@
                                                 <label class="col-sm-4 col-form-label">Observaciones</label>
                                                 <div class="form-group row">
                                                     <div class="col-sm-12">
-                                                        <textarea class="form-control" rows="6" [(ngModel)]="observaciones"></textarea>
-                                                        <div class="alert alert-danger" *ngIf="observacionRequired" style="padding: 0;">
+                                                        <textarea class="form-control" rows="6"
+                                                            [(ngModel)]="observaciones"></textarea>
+                                                        <div class="alert alert-danger" *ngIf="observacionRequired"
+                                                            style="padding: 0;">
                                                             El campo Observaciones es requerido
-                                                          </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <label class="col-sm-4 col-form-label">Receta Médica</label>
                                                 <div class="form-group row">
                                                     <div class="col-sm-12">
-                                                        <textarea class="form-control" rows="6" [(ngModel)]="recetaMedica"></textarea>
-                                                        <div class="alert alert-danger" *ngIf="recetaMedicaRequired" style="padding: 0;">
+                                                        <textarea class="form-control" rows="6"
+                                                            [(ngModel)]="recetaMedica"></textarea>
+                                                        <div class="alert alert-danger" *ngIf="recetaMedicaRequired"
+                                                            style="padding: 0;">
                                                             El campo receta medica es requerido
-                                                          </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <label class="col-sm-4 col-form-label">Envio a Brigada</label>
@@ -275,60 +270,31 @@
                                                         paciente</label>
                                                     <div class="form-group row">
                                                         <div class="col-sm-12">
-                                                            <textarea class="form-control" rows="4" [(ngModel)]="direccionPaciente"></textarea>
-                                                            <div class="alert alert-danger" *ngIf="direccionRequired" style="padding: 0;">
+                                                            <textarea class="form-control" rows="4"
+                                                                [(ngModel)]="direccionPaciente"></textarea>
+                                                            <div class="alert alert-danger" *ngIf="direccionRequired"
+                                                                style="padding: 0;">
                                                                 El campo direccion del paciente es requerido
-                                                              </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-success" mat-button (click)="finalice(true)" [disabled]="disabledEnd"
-                                                    cdkFocusInitial>
+                                                <button class="btn btn-success" mat-button (click)="finalice(true)"
+                                                    [disabled]="disabledEnd" cdkFocusInitial>
                                                     Atendido
                                                 </button>
-                                                <button class="btn btn-warning" mat-button (click)="finalice(false)" [disabled]="disabledEnd"
-                                                    cdkFocusInitial>
+                                                <button class="btn btn-warning" mat-button (click)="finalice(false)"
+                                                    [disabled]="disabledEnd" cdkFocusInitial>
                                                     Inconcluso
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!--<div class="row" *ngIf="technicalSheetValid">
-                                    <div class="col-md-6">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">
-                                                <p>
-                                                <h3>Sintomatología</h3>
-                                                <h5>(si relleno la encuenta)</h5>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover">
-                                                        <thead class="">
-                                                            <th>Nombre de Factor</th>
-                                                            <th>Categoria</th>
-                                                            <th>Factor</th>
-                                                            <th>Fecha de Registro</th>
-                                                            <th>Confimado</th>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let item of technicalSheetResult">
-                                                                <td>{{item.factor}}</td>
-                                                                <td>{{item.categoryName}}</td>
-                                                                <td>{{item.presentFactor}}</td>
-                                                                <td>{{item.registerDate | date:'dd-MM-yyyy h:mm:ss a'}}
-                                                                </td>
-                                                                <td>{{item.confirmed}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
+                                <div class="alert alert-info" *ngIf="validateMessgeEnd">
+                                    <strong>Información!</strong> {{message}}
+                                </div>
+                                <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
                             </div>
                         </div>
                     </div>

@@ -44,10 +44,15 @@ export class CapturedCaseComponent implements OnInit {
   nombreInternoMax = false;
   envioBrigada = false;
   disabledEnd = false;
+  validateMessgeEnd = false;
+  phoneRequired = false;
+  ciRequired = false;
+  minPhone = false;
 
-  constructor(private service: CapturedCaseService, public dialog: MatDialog, private dataSeetService: DataSeetService, private modalService: NgbModal, private myCasesService: MyCasesService,) {
+  constructor(private service: CapturedCaseService, public dialog: MatDialog, private dataSeetService: DataSeetService, private modalService: NgbModal, private myCasesService: MyCasesService) {
     this.createCaseDto.level = 2;
     this.createCaseDto.origin = 'Facebook';
+    this.createCaseDto.phoneNumber = this.createCaseDto.documentNumber = '';
   }
 
 
@@ -55,23 +60,46 @@ export class CapturedCaseComponent implements OnInit {
   }
 
   createCase() {
+    this.phoneRequired = false;
+    this.ciRequired = false;
+    this.minPhone = false;
+    let errors = [];
+    if (this.createCaseDto.phoneNumber === "" || this.createCaseDto.phoneNumber.trim() === "") {
+      this.phoneRequired = true;
+      errors.push("error");
+    }
+    if (this.createCaseDto.documentNumber === "" || this.createCaseDto.documentNumber.trim() === "") {
+      this.ciRequired = true;
+      errors.push("error");
+    }
+    if (this.createCaseDto.phoneNumber.length <= 3) {
+      this.minPhone = true;
+      errors.push("error");
+    }
+    if (errors.length) {
+      return;
+    }
+    this.isLoading = true;
     this.service.capturedCase(this.createCaseDto).subscribe((resp: any) => {
-      debugger;
       if (resp.isOk) {
+        this.isLoading = false;
         this.isCreatedCase = true;
         this.responseCreateCase = resp.body;
         this.nombreInterno = resp.body.isInsurance ? resp.body.namePatient : '';
-        if (resp.body.previousAttentions.length > 0) {
-          this.listPreviousAttentions = resp.body.previousAttentions;
-          this.previousCaseDto.caseId = this.listPreviousAttentions[0].caseId;
-          this.previousCaseValid = true;
-          this.getHistoricalCase();
+        if (!resp.body.isNewPatient) {
+          if (resp.body.previousAttentions.length > 0) {
+            this.listPreviousAttentions = resp.body.previousAttentions;
+            this.previousCaseDto.caseId = this.listPreviousAttentions[0].caseId;
+            this.previousCaseValid = true;
+            this.getHistoricalCase();
+          }
+          if (resp.body.lastControlId !== 0) {
+            this.technicalSheetDto.id = resp.body.lastControlId;
+            this.technicalSheetValid = true;
+            this.handleGetTechnicalSheet();
+          }
         }
-        if (resp.body.lastControlId !== 0) {
-          this.technicalSheetDto.id = resp.body.lastControlId;
-          this.technicalSheetValid = true;
-          this.handleGetTechnicalSheet();
-        }
+
       } else {
         this.message = resp.message;
       }
@@ -87,7 +115,7 @@ export class CapturedCaseComponent implements OnInit {
     });
   }
 
-  handleSeeTecnical(content) {
+  handleSeeTecnical(content: any) {
     this.modalService.open(content, { size: "ls", centered: true });
 
   }
@@ -95,17 +123,14 @@ export class CapturedCaseComponent implements OnInit {
   handleGetTechnicalSheet() {
     if (this.technicalSheetDto.id != undefined) {
       this.dataSeetService.getTechnicalSheet(this.technicalSheetDto).subscribe((resp: any) => {
-        debugger;
         this.technicalSheetResult = resp.body;
-        //this.totalTechnicalSheet = this.technicalSheetResult.length;
-        //this.showMessageError = this.totalTechnicalSheet > 0 ? false : true;
       }, error => {
         //console.log('no existen registros');
       });
     }
   }
 
-  finalice(state) {
+  finalice(state: any) {
     this.observacionRequired = false;
     this.direccionRequired = false;
     this.recetaMedicaRequired = false;
@@ -156,19 +181,24 @@ export class CapturedCaseComponent implements OnInit {
     };
     this.isLoading = true;
     this.disabledEnd = true;
-    debugger;
+    this.validateMessgeEnd = false;
     this.myCasesService.updateCase(request).subscribe(
       (resp: any) => {
-        debugger;
         this.isLoading = false;
         if (resp.isOk) {
+          this.disabledEnd = true;
           window.location.reload();
         } else {
+          this.message = resp.message;
           this.disabledEnd = false;
+          this.validateMessgeEnd = true;
         }
       },
       (error) => {
         this.isLoading = false;
+        this.disabledEnd = false;
+        this.validateMessgeEnd = true;
+        this.message = error.message;
       }
     );
   }

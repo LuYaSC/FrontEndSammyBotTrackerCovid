@@ -32,6 +32,8 @@ import { AdministrationComponent } from './views/administration/administration.c
 import { NgbAlertModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormCreateCaseComponent } from './Views/captured-case/components/form-create-case/form-create-case.component';
 import { DetailCapturedCaseComponent } from './Views/captured-case/components/detail-captured-case/detail-captured-case.component';
+import { DirectivesModule } from './Directives/directives.module';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   imports: [
@@ -43,6 +45,7 @@ import { DetailCapturedCaseComponent } from './Views/captured-case/components/de
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+    DirectivesModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     }),
@@ -69,6 +72,7 @@ import { DetailCapturedCaseComponent } from './Views/captured-case/components/de
     AdministrationComponent,
     FormCreateCaseComponent,
     DetailCapturedCaseComponent,
+    SafePipe,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]

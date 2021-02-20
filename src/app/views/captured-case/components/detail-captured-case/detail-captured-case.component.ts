@@ -15,7 +15,6 @@ export class DetailCapturedCaseComponent {
     public dialogRef: MatDialogRef<DetailCapturedCaseComponent>,
     @Inject(MAT_DIALOG_DATA) public item: CreateCaseResult) 
     { 
-      debugger;
       dialogRef.disableClose = true;
       this.listPreviousAttentions = item.previousAttentions;
       this.previousCase = this.listPreviousAttentions[0].caseId;

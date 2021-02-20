@@ -18,11 +18,9 @@ export class FormCreateCaseComponent implements OnInit {
   }
 
   createCase() {
-    debugger;
     this.service.capturedCase(this.createCaseDto).subscribe((resp: any) => {
-      debugger;
       if (resp.isOk) {
-this.isCreatedCase = true;
+        this.isCreatedCase = true;
 
       } else {
         this.message = resp.message;
